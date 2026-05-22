@@ -25,6 +25,39 @@
             "pages": [
               "concepts/ai-receptionist"
             ]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "dashboard/voice-greeting",
+              "dashboard/business-hours"
+            ]
+          },
+          {
+            "group": "Knowledge Base",
+            "pages": [
+              "knowledge-base/services",
+              "knowledge-base/faqs",
+              "knowledge-base/transfer-rules"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/google-calendar"
+            ]
+          },
+          {
+            "group": "Billing",
+            "pages": [
+              "billing/plans-and-pricing"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/common-issues"
+            ]
           }
         ]
       }

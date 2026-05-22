@@ -1,0 +1,59 @@
+---
+title: "Services"
+description: "Tell your AI receptionist what your business offers so it can answer pricing and feature questions accurately."
+---
+
+Open **Knowledge Base → Services**. The AI uses this list to answer questions like "what do you offer?", "how much does X cost?", and "do you do Y?"
+
+## What each service entry includes
+
+- **Service name** (up to 200 characters) — the customer-facing name
+- **Description** (up to 1,000 characters) — what it includes, who it's for, any limitations
+- **Price** (free-form text) — "$150 starting", "$89-149", "Call for quote", "Free consultation"
+
+## Writing services well
+
+The AI uses your description verbatim when explaining services. Write for a caller, not a website.
+
+**Good example:**
+> **Service name:** Drain cleaning
+>
+> **Description:** Clears clogged kitchen sinks, bathroom drains, and main sewer lines. Includes a camera inspection if the clog returns within 30 days. Most clogs cleared in under an hour.
+>
+> **Price:** $150 starting, most jobs $150-300
+
+**Less effective:**
+> **Service name:** Plumbing services
+>
+> **Description:** We do plumbing.
+>
+> **Price:** Varies
+
+## Auto-populated services
+
+When you sign up via the demo flow (entering your business URL), we scrape your website and pre-populate up to 8 services. Review and edit these — the scraper does its best, but you know your business better.
+
+<Warning>
+If services were scraped before May 13, 2026, descriptions may be capped at 300 characters (old limit). We've since increased to 1,000 characters. Edit any truncated entries to add detail.
+</Warning>
+
+## Editing and reordering
+
+- Click any service to edit name, description, or price
+- Use the drag handle to reorder (the AI mentions services in this order)
+- Click the trash icon to delete (no undo — be sure)
+- Click **Add Service** to add new entries
+
+## Saving
+
+Changes save individually as you edit. No "Save All" button — each edit persists immediately.
+
+## What the AI does with this
+
+- **Pricing questions:** "How much for a drain cleaning?" → AI quotes from your Price field
+- **Capability questions:** "Do you do furnace repair?" → AI checks your Services list, says yes or "we don't, but we recommend calling [partner]" if you've configured a referral
+- **Comparison questions:** "What's the difference between basic and deluxe?" → AI uses descriptions to compare
+
+<Tip>
+If a caller asks about something you don't offer, the AI will say so honestly and offer to take a message. It won't invent services.
+</Tip>

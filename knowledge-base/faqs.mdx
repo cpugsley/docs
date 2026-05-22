@@ -1,0 +1,66 @@
+---
+title: "FAQs"
+description: "Train your AI receptionist on the questions your customers actually ask."
+---
+
+Open **Knowledge Base → FAQs**. Each entry is a question + answer pair the AI can quote when callers ask similar things.
+
+## What each FAQ includes
+
+- **Question** (up to 500 characters) — how a customer would phrase it
+- **Answer** (up to 2,000 characters) — what the AI should say
+
+## Writing FAQs that work
+
+The AI matches inbound questions semantically (it understands paraphrases). But you'll get better results if you write questions the way customers actually ask them.
+
+**Good example:**
+> **Q:** Do you take insurance?
+>
+> **A:** We accept most major insurance plans including Blue Cross, Aetna, Cigna, and United Healthcare. We're not in-network with Medicare or Medicaid. If you call with your insurance card handy, we can verify coverage in about a minute.
+
+**Less effective:**
+> **Q:** Insurance acceptance policies and reimbursement procedures
+>
+> **A:** Various plans accepted. Inquire at time of booking.
+
+(Customers don't talk like the second one.)
+
+## What to seed
+
+Start with the 10-15 questions your team answers most often on the phone. Common categories:
+
+- **Pricing** ("What does X cost?", "Do you offer payment plans?")
+- **Logistics** ("Where are you located?", "Do you do house calls?")
+- **Policies** ("What's your cancellation policy?", "Do you take insurance?")
+- **Qualifications** ("Are you licensed?", "How long have you been in business?")
+- **Edge cases** ("Do you work weekends?", "Do you serve [neighboring town]?")
+
+## Suggest FAQs
+
+Click **Suggest FAQs** to have the AI propose entries based on your business info and services. Review each suggestion before adding — the AI generates starting points, not final answers.
+
+<Note>
+The Suggest FAQs feature is queued for a fix in the upcoming release. If the button doesn't respond, add FAQs manually for now and check back.
+</Note>
+
+## Editing
+
+- Click any FAQ to edit
+- Drag to reorder (affects nothing — order is just for your reference)
+- Trash icon to delete (no undo)
+
+## What the AI does with this
+
+When a caller asks a question, the AI checks (in order):
+
+1. **Services** — for capability and pricing questions
+2. **FAQs** — for everything else
+3. **Custom Instructions** (Settings → General) — for tenant-specific business logic
+4. **General knowledge** — for context the AI can answer from common knowledge
+
+If none of the above answer the question confidently, the AI offers to take a message.
+
+<Tip>
+The more specific your FAQs, the less the AI relies on general knowledge — which means more accurate, more on-brand answers.
+</Tip>

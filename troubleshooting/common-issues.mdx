@@ -1,0 +1,114 @@
+---
+title: "Common issues"
+description: "Quick fixes for the most-reported problems."
+---
+
+## Notifications
+
+### I'm not getting any notification emails
+
+The notification system is being repaired (Bug #33 in our tracker). Until the fix ships:
+- Check your call activity directly in **Dashboard → Calls**
+- Configure Slack notifications (workaround) via **Settings → Notifications** if available
+- Contact support@cloudconcierge.ai with your tenant ID and we can check call activity manually
+
+### Daily / weekly digests aren't arriving
+
+Same root cause as above. Tracking under Bug #33.
+
+## Phone & calls
+
+### My AI receptionist isn't picking up
+
+1. Confirm your business phone number is **active** in **Dashboard → Settings → General → Business Phone Number**
+2. Confirm your line is forwarded to that number (carrier setting — varies by phone provider)
+3. Place a test call to the CloudConcierge number directly — does the AI answer?
+   - **Yes**: forwarding is the issue. Check your carrier's call forwarding setup.
+   - **No**: contact support@cloudconcierge.ai with your tenant ID
+
+### Recordings won't download
+
+Click the **Download** button on a call detail. If you get a CORS error, that's the old bug — fixed in production as of May 2026. If you still see it:
+- Hard refresh the dashboard (Ctrl+Shift+R or Cmd+Shift+R)
+- Try a different browser
+- Contact support
+
+## Calendar & appointments
+
+### Google Calendar connect fails with "Access Blocked"
+
+This was a known issue with OAuth scopes — fixed. If you see it now, contact support@cloudconcierge.ai.
+
+### Appointment booked twice when caller reschedules
+
+The AI currently creates a new appointment instead of updating the existing one on reschedule (Bug #29 in our tracker). Workaround: manually delete the old appointment from your calendar. Permanent fix queued.
+
+### Booking status buttons don't update in the Bookings dashboard
+
+Fixed as of May 2026 (Bug #27). If you still see stale state, hard refresh.
+
+## Settings
+
+### Speaking style slider resets to 50%
+
+Fixed as of May 2026 (Bug #25). The slider now saves correctly. If you still see resets:
+- Confirm you clicked **Save Changes**
+- Hard refresh
+- If still broken, contact support with a screen recording
+
+### Business hours editor missing
+
+Fixed as of May 2026 (Bug #23). Editor is now in **Settings → General → Business Hours** (below Custom Instructions). If you don't see it there, hard refresh — your browser may be caching an old build.
+
+## Knowledge Base
+
+### Service description is cut off after a few lines
+
+Fixed for new entries as of May 2026 (Bug #24). The limit was raised from 300 to 1,000 characters. **Existing truncated entries** stay truncated until you edit them — go to Knowledge Base → Services → click the entry → expand the description → save.
+
+### "Suggest FAQs" button doesn't do anything
+
+Currently being repaired (Bug #30). Workaround: add FAQs manually. See [FAQs](/knowledge-base/faqs) for guidance.
+
+## Integrations
+
+### HubSpot disconnect/reconnect shows DNS error
+
+Currently being repaired (Bug #38). Workaround: contact support@cloudconcierge.ai — we can manually reset your HubSpot connection.
+
+## Billing
+
+### "Switch Plan" only shows cancellation, not upgrade options
+
+Currently being repaired (Bug #35). Workaround: contact support@cloudconcierge.ai with the plan you want to switch to — we can apply it manually.
+
+### Minutes used shows incorrect numbers
+
+This was a known issue during the trial period (Bug #17, fixed). If you see it now on a paid plan, contact support with your tenant ID.
+
+## UI / display
+
+### Dark mode toggle does nothing
+
+Fixed as of May 2026 (Bug #34). If you still see no change, hard refresh. The toggle now adds the `dark` class to the document and persists your preference.
+
+### Mobile menu stays open after I tap a navigation item
+
+Fixed as of May 2026 (Bug #37). Hard refresh if you still see it.
+
+### Help page "View Documentation" returns DNS error
+
+Was caused by docs.cloudconcierge.ai not being set up yet (Bug #36). You're reading this docs site now — so it's fixed.
+
+## Still stuck?
+
+Email **support@cloudconcierge.ai** with:
+- Your tenant ID (find it in **Settings → General**)
+- A short description of what you tried
+- A screenshot if applicable
+
+We respond within one business day.
+
+<Note>
+For real-time help during the AI receptionist's working hours, click the **Get Help** button in the bottom-right of the dashboard. This opens a support ticket immediately.
+</Note>

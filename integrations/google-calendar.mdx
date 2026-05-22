@@ -1,0 +1,73 @@
+---
+title: "Google Calendar"
+description: "Connect Google Calendar so your AI receptionist can book appointments live during calls."
+---
+
+CloudConcierge can read your Google Calendar to know when you're free, and write to it when callers book appointments. The integration uses OAuth — your data stays in your Google account, we just hold a refresh token.
+
+## Connect Google Calendar
+
+1. Open **Settings → Integrations**
+2. Find **Google Calendar** in the Calendar Integrations section
+3. Click **Connect**
+4. A Google sign-in popup appears
+5. Sign in with the Google account that owns the calendar you want CloudConcierge to use
+6. Review the requested permissions:
+   - **See and edit events on all your calendars** — required for booking
+   - **See your email address** — used to label which Google account is connected
+   - **See your basic profile info** — used to display your name in the dashboard
+7. Click **Allow**
+8. Popup closes; the integration card shows **Connected ✓**
+
+## Pick a primary calendar
+
+After connecting, choose which calendar to use:
+
+- **Personal calendar** (recommended for solo operators)
+- **Work calendar** (recommended if it's a separate calendar)
+- **Dedicated CloudConcierge calendar** (recommended if you want a clean separation)
+
+In **Settings → Integrations → Google Calendar**, click **Set as primary calendar**. Bookings now land on that calendar.
+
+<Tip>
+If you're a solo operator and your personal Google Calendar already shows your true availability, use it directly. CloudConcierge respects existing events when offering availability to callers.
+</Tip>
+
+## What the AI does
+
+**During a call:**
+- Caller asks "can I book an appointment Tuesday?" → AI checks your calendar live
+- AI offers available slots based on your business hours + existing events
+- Caller picks a time → AI confirms details and writes the event to your calendar
+
+**Event details:**
+- Title: configurable per appointment type (e.g., "Drain cleaning — John Doe")
+- Description: includes caller name, phone, notes, and a link back to the call recording
+- Duration: per appointment type (default: 30 minutes)
+
+## Disconnecting
+
+To revoke access:
+
+1. **Settings → Integrations → Google Calendar**
+2. Click **Disconnect**
+3. Confirm
+
+You should also revoke the OAuth grant in [Google account settings](https://myaccount.google.com/permissions) for completeness.
+
+## Troubleshooting
+
+**"Access Blocked" error during connect**
+- This was an issue in early dev — fixed in production. If you see this now, contact support@cloudconcierge.ai.
+
+**Bookings not appearing on calendar**
+- Check **Settings → Integrations** → is Google Calendar set as primary?
+- Check that the OAuth grant is still valid (Google revokes after long inactivity)
+- Disconnect + reconnect to refresh the token
+
+**Tokens expiring frequently**
+- Our Google OAuth app is in "Testing" mode while we await production approval. In Testing mode, refresh tokens expire every ~6 days. This is expected during early access. Production approval will resolve.
+
+<Note>
+Microsoft Outlook Calendar works similarly — see the [Microsoft Calendar](/integrations/microsoft-calendar) page (if you're on the Outlook ecosystem).
+</Note>
