@@ -25,7 +25,9 @@
           {
             "group": "Concepts",
             "pages": [
-              "concepts/ai-receptionist"
+              "concepts/ai-receptionist",
+              "concepts/data-and-privacy",
+              "concepts/white-label"
             ]
           },
           {
@@ -53,7 +55,8 @@
             "pages": [
               "knowledge-base/services",
               "knowledge-base/faqs",
-              "knowledge-base/transfer-rules"
+              "knowledge-base/transfer-rules",
+              "knowledge-base/scraped-content"
             ]
           },
           {

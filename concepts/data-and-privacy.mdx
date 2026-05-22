@@ -1,0 +1,144 @@
+---
+title: "Data & privacy"
+description: "What we collect, where it's stored, how long we keep it, and how to delete it."
+---
+
+CloudConcierge handles sensitive customer data: phone calls, transcripts, recordings, customer info. We take privacy seriously and want you to know exactly what happens to that data.
+
+## What we collect
+
+### Call data
+- **Phone number** of the caller (E.164 format)
+- **Audio recording** of the call (yours and theirs)
+- **Transcript** (AI-generated text of what was said)
+- **AI summary** of the conversation
+- **Sentiment analysis** and intent tagging (AI-derived)
+- **Caller name + email** (if shared during the call)
+- **Caller address** (if shared, e.g., for service appointments)
+
+### Account data
+- **Your contact info:** name, email, business address, phone
+- **Your business info:** services, FAQs, hours, custom instructions
+- **Payment info:** card details stored in Stripe, not in CloudConcierge
+- **Integration credentials:** OAuth tokens for Google/Microsoft/HubSpot/GHL
+
+## Where it's stored
+
+| Data type | Where | Notes |
+|---|---|---|
+| Account info | Amazon DynamoDB (US East 1) | Encrypted at rest with AWS KMS |
+| Call recordings | Amazon S3 | Encrypted, presigned-URL access only |
+| Transcripts + summaries | DynamoDB + S3 | Encrypted |
+| OAuth tokens | DynamoDB | Encrypted with KMS, restricted IAM access |
+| Payment info | Stripe (not CC) | PCI Level 1 certified |
+| Email content (support tickets) | Amazon Connect Cases + SES | AWS-encrypted |
+
+All data hosted in **US-East-1 (Virginia)**. We don't replicate to other regions or other countries.
+
+## How long we keep it
+
+| Data | Default retention |
+|---|---|
+| Call recordings | 90 days, then auto-deleted |
+| Call transcripts + summaries | 12 months |
+| Account metadata (services, FAQs) | Indefinite, until account closure |
+| Payment records | 7 years (US tax law) |
+| Audit logs (admin actions) | 12 months |
+| Webhook delivery logs | 30 days |
+| Email support history | 24 months |
+
+For longer recording retention (1 year, 3 years), contact support — available on Business plan.
+
+For shorter retention (e.g., 30 days for compliance), contact support — available on all plans.
+
+## Who has access
+
+### Inside CloudConcierge
+- **Our engineering team:** indirect access via AWS console for debugging. Audit-logged.
+- **Our support team:** can impersonate your tenant (read-only) to help with issues. Audit-logged with "viewed as" attribution.
+- **Our billing systems:** automated, no human eyes on payment data.
+
+We **don't** sell your data. We **don't** share it with third parties for advertising. We use call data internally to improve the AI's accuracy, in aggregate, anonymized form.
+
+### Outside CloudConcierge
+- **Stripe:** payment data only
+- **Mintlify:** the docs site you're reading — no customer data, only published docs
+- **Amazon (AWS):** our infrastructure host — they don't have access to our customer data; we're their customer
+- **OpenAI / Anthropic / AWS Bedrock:** AI model providers. Per-call data is sent for processing but **not retained** for model training (we use opt-out APIs).
+
+## How AI uses call data
+
+When the AI is on a call:
+1. Audio streams to AWS for transcription
+2. Transcript sent to AWS Bedrock (Claude) for response generation
+3. Response synthesized back to audio and played
+
+**Important:** AWS Bedrock does NOT train its models on customer prompts/responses (verified in their privacy policy). We explicitly use opt-out APIs.
+
+## Customer requests
+
+Your tenants' customers (the people calling your business) have privacy rights too.
+
+### "Stop recording me"
+If a caller asks the AI to stop recording, the AI:
+- Acknowledges the request
+- Transcript continues (text, not audio)
+- Audio recording stops for the rest of the call
+- Pre-request portion of the call is preserved
+
+This is configurable per tenant — you can set "stop recording on request" to be the default, or require explicit confirmation.
+
+### "Delete my data"
+If a caller asks for their data deleted:
+- Direct them to email support@cloudconcierge.ai with their phone number
+- We delete their CallerProfile, recordings, and transcripts within 30 days
+- We're required to keep call records for 90 days for our own debugging — we can shorten this on request with valid reason
+
+### GDPR / CCPA
+We're GDPR-compliant for EU callers and CCPA-compliant for California callers. Verification process for data requests:
+1. Caller emails support with their phone number
+2. We send a confirmation code to that number
+3. They confirm via SMS
+4. We process the deletion
+
+## Closing your account
+
+When you cancel CloudConcierge:
+- 30-day grace period (covered in [Cancellation](/billing/cancellation))
+- After grace period:
+  - Call recordings: deleted
+  - Transcripts: deleted
+  - Knowledge base content: deleted
+  - CallerProfiles (CC's local CRM cache): deleted
+  - Account info: anonymized after legal retention period (7 years for tax records)
+
+External integrations are **not** affected:
+- Your HubSpot data stays in HubSpot
+- Your Google Calendar events stay in Google Calendar
+- Your GHL data stays in GHL (Managed: see below)
+
+For Managed GHL: your sub-account is deleted on cancellation (after 30-day grace). Export your GHL data during the grace period if you want to keep it.
+
+## Encryption details (for the technically curious)
+
+- **At rest:** AWS KMS-encrypted S3 buckets + DynamoDB tables. Per-tenant keys for some sensitive fields (OAuth tokens).
+- **In transit:** TLS 1.2+ for all customer-facing endpoints (HTTPS only)
+- **Database:** DynamoDB with encryption at rest, IAM-restricted access
+- **Recordings:** S3 server-side encryption (SSE-S3), presigned URLs valid 1 hour max
+- **OAuth tokens:** field-level encryption with KMS before storing in DynamoDB
+
+## Vulnerability disclosure
+
+If you find a security issue, email **security@cloudconcierge.ai** with details. We respond within 24 hours, fix critical issues within 7 days, and credit you in our security acknowledgments (with your permission).
+
+## Compliance certifications
+
+- **GDPR-compliant** (with appropriate data processing addendum available)
+- **CCPA-compliant**
+- **HIPAA:** not currently HIPAA-compliant. If you're in healthcare, don't use CC for protected health information (PHI) until HIPAA BAA is available (roadmap).
+
+## Contact
+
+Privacy questions: privacy@cloudconcierge.ai
+Security issues: security@cloudconcierge.ai
+General support: support@cloudconcierge.ai

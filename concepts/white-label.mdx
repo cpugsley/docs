@@ -1,0 +1,129 @@
+---
+title: "White-label & reseller overview"
+description: "Resell CloudConcierge under your own brand to your clients. Available on the agency tier."
+---
+
+If you're a marketing agency, MSP, IT consultancy, or vertical-specific platform serving SMBs, you can resell CloudConcierge under your own brand. Your clients see your name, your domain, your branding — never CloudConcierge.
+
+## What "white-label" means at CloudConcierge
+
+```
+                   YOU (Reseller)
+                     │
+                     ├─── Brand: "Acme Calls" (your name)
+                     ├─── Domain: calls.acmeagency.com
+                     ├─── Pricing: your margin
+                     │
+            ┌────────┴────────┐
+            │                 │
+        Client 1          Client 2
+        Sees "Acme        Sees "Acme
+        Calls"            Calls"
+```
+
+You become a reseller. CC stays invisible to your end clients.
+
+## What's included (Reseller tier)
+
+- **White-labeled dashboard** at your domain (e.g., `calls.acmeagency.com`)
+- **Custom branding:** logo, colors, fonts, favicons applied throughout
+- **Reseller admin panel** — manage all your client tenants from one view
+- **Volume pricing** — discounted CC infrastructure cost; you set your own client pricing
+- **Co-branded docs** — your branding on `docs.acmeagency.com` (auto-generated from our docs)
+- **Custom support email** — `support@acmeagency.com` instead of `support@cloudconcierge.ai`
+- **Per-client billing** — bill your clients however you want; we bill you for the aggregate
+
+## What's NOT white-labeled
+
+For technical/compliance reasons, the following stay CloudConcierge:
+
+- **The actual AI model providers** (AWS Bedrock, Claude, etc.) — you can't claim you built the AI
+- **Underlying telephony** (Amazon Connect, Twilio fallback) — appears in carrier logs as AWS-routed
+- **Email sender (some scenarios)** — automated emails may still show "via cloudconcierge.ai" in headers
+- **Voice options** — the same voice library is shared across all CC instances
+
+What clients see in normal use: your brand. What they could find with deep technical inspection: AWS/CC infrastructure. This is fine for 99.9% of use cases.
+
+## Pricing for resellers
+
+Two pricing approaches:
+
+### A) Bring Your Own Contracts (BYOC pricing)
+- You pay CC at agency tier (~$2,500/mo base + per-tenant fees)
+- You charge clients whatever you want
+- You manage all client billing yourself
+- Highest margin, most operational work
+
+### B) Wholesale + per-tenant
+- You pay CC base reseller fee (~$500/mo)
+- We charge $X per active client tenant (lower than retail)
+- You bill clients separately at your retail price
+- Lower margin, less billing operations
+
+Specifics shift — contact partnerships@cloudconcierge.ai for current numbers.
+
+## Onboarding clients
+
+You have a control panel that lets you:
+
+1. **Provision a client tenant** in 30 seconds (name, business email, plan)
+2. **Configure their default settings** (services, hours, voice) — either by importing from a template or filling per-client
+3. **Send them an invite link** to access the white-labeled dashboard
+4. **Manage their account from your reseller panel** — change plan, view usage, impersonate (read-only)
+
+## Per-client white-label config
+
+Each client tenant can have **further customization** beyond your reseller branding:
+
+- Their own business name, logo, address shown in the dashboard
+- Per-tenant brand colors (override the default reseller theme)
+- Per-tenant subdomain (e.g., `acme-client.your-platform.com`)
+
+This is rarely used at the per-client level — most resellers brand it once at the agency level and use that for all clients.
+
+## Client-facing docs
+
+Your `docs.acmeagency.com` is auto-generated from our docs (this site you're reading), with:
+
+- Your branding/colors
+- "CloudConcierge" replaced with your product name
+- Your support email
+- Your dashboard URL
+
+You can override individual pages with your own content — useful for industry-specific guidance or terminology.
+
+## Support model
+
+You're the front line. We're your back stop.
+
+- **Your clients** email `support@acmeagency.com` (or whatever you set)
+- **You handle** Tier 1 (knowledge base questions, configuration help, billing questions)
+- **You escalate to us** for Tier 2 (technical bugs, AI behavior issues, infrastructure)
+
+We have a dedicated Slack channel with reseller partners for fast escalation.
+
+## SLAs
+
+| Tier | Response time | Resolution target |
+|---|---|---|
+| Critical (outage, calls not being answered) | 1 hour | 4 hours |
+| High (specific tenant broken) | 4 hours | 1 business day |
+| Medium (feature degraded) | 1 business day | 5 business days |
+| Low (questions, enhancements) | 5 business days | Best effort |
+
+## Status
+
+White-label / reseller tier is in **early access**. If you're interested, contact **partnerships@cloudconcierge.ai** with:
+
+- Your agency name + size
+- Industries you serve
+- Expected # of client tenants in year 1
+- Existing tech stack (so we can scope integration work)
+
+We onboard ~5 new resellers per quarter as we build out the agency program. Limited capacity.
+
+## See also
+
+- [Plans & pricing](/billing/plans-and-pricing) — retail pricing (reference for setting your margin)
+- [API keys](/integrations/api-keys) — programmatic access useful for reseller dashboards
+- [Data & privacy](/concepts/data-and-privacy) — what your clients should know about data handling

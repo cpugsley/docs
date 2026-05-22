@@ -1,0 +1,118 @@
+---
+title: "Auto-populated knowledge base"
+description: "When you sign up via the demo flow, CloudConcierge scrapes your website to pre-populate services and FAQs. Here's what's auto-grabbed and how to review."
+---
+
+If you signed up via the demo flow (entering your business URL during the AI demo), CloudConcierge **scraped your website** and pre-populated your knowledge base with a starting set of services and FAQs.
+
+This page explains what the scraper does, what to review, and how to handle the inevitable inaccuracies.
+
+## What gets scraped
+
+The scraper visits your website and extracts:
+
+| Field | What it finds | Limit |
+|---|---|---|
+| **Business name** | From page titles, header, schema.org markup | — |
+| **Industry** | Inferred from content | Single category |
+| **Services** | Anything that looks like a service offering | Up to 8 services |
+| **FAQs** | Q&A patterns, FAQ pages | Up to 10 FAQs |
+| **Business hours** | Schema.org `openingHours`, hours pages | Per-day |
+| **Contact info** | Phone, email, address | Best-effort |
+| **Service area** | "We serve [region]" patterns | Free-form text |
+
+We use **Firecrawl** to crawl up to 20 pages from your site (we hit the most-linked pages first) and **Claude (via AWS Bedrock)** to extract structured data from the unstructured HTML.
+
+## Field limits
+
+To prevent runaway data, each field has a hard limit:
+
+- **Service name:** 200 characters
+- **Service description:** 1,000 characters (raised from 300 in May 2026 — see Bug #24)
+- **FAQ question:** 500 characters
+- **FAQ answer:** 2,000 characters
+
+If the scraper finds more, it truncates.
+
+## What to review (right after signup)
+
+**Open Knowledge Base → Services.** Scan each entry:
+
+1. **Is the name right?** Scrapers sometimes pick up SEO titles like "Best Drain Cleaning Services in Springfield" instead of "Drain Cleaning"
+2. **Is the description accurate?** Marketing copy sometimes scrapes in ("We're the #1 plumber in...") — clean these out
+3. **Is the price right?** Often missing from websites. Add manually.
+4. **Are any services missing?** Add anything the scraper missed.
+5. **Any wrong services?** Delete what's not yours.
+
+Then **Knowledge Base → FAQs.** Same review:
+
+1. **Are the questions natural?** Scraper sometimes pulls headings as questions ("Our Services" isn't a question)
+2. **Are the answers complete?** Web content often has truncated answers ("Read more")
+3. **Add what's missing.** Real phone-call questions tend to differ from web-FAQ questions.
+
+Plan for ~15-30 minutes of cleanup right after signup. This is the single highest-leverage investment in AI accuracy.
+
+## Common scraper hiccups
+
+### Service descriptions cut off mid-sentence
+**Cause:** Bug #24 — old 300-char limit. Fixed for new scrapes after May 13, 2026. Existing entries from before that may still be truncated.
+
+**Fix:** edit the service in the Knowledge Base, expand the description manually.
+
+### Wrong industry inferred
+**Cause:** scraper sees ambiguous content (e.g., a plumber who also does HVAC may get categorized as HVAC only)
+
+**Fix:** Settings → General → Industry dropdown. Pick the right one.
+
+### Hours look wrong
+**Cause:** scraper picked up "by appointment" or seasonal hours
+
+**Fix:** Settings → Business Hours. Manual override.
+
+### Service area mangled
+**Cause:** free-form text on the website ("Serving the greater Boston area within 30 miles") gets paraphrased
+
+**Fix:** Settings → General → Service Area. Edit to be precise.
+
+### Phone number scraped, but it's the wrong line
+**Cause:** marketing page shows main business number; the scraper grabs it
+
+**Fix:** Settings → General → Contact Phone. Set the line you actually want CC to know about. (Note: this is just for the AI's reference, NOT what callers dial — that's your business phone number.)
+
+## Why scraper accuracy matters
+
+The AI uses Knowledge Base content **verbatim** when answering questions. If the scraper grabbed:
+
+- Marketing fluff → AI sounds like marketing copy on calls (bad)
+- Outdated pricing → AI quotes wrong prices (very bad)
+- Wrong services → AI books appointments for things you don't offer (very, very bad)
+
+Garbage in, garbage out applies in spades. Spend the 30 minutes reviewing.
+
+## Re-scraping
+
+You can't trigger a fresh scrape from the dashboard (yet). If your website has changed significantly and you want a re-scrape:
+
+1. Contact support@cloudconcierge.ai with your business URL
+2. We re-run the scraper and overwrite your knowledge base
+3. **Backup your manual edits first** — re-scrape replaces them
+
+In practice, most tenants don't need to re-scrape — they just manually update their KB as their business evolves.
+
+## Scraper limitations
+
+Things the scraper **can't** figure out:
+
+- **Prices** — only on websites that publish prices (most don't)
+- **Insurance accepted** — same; rarely listed publicly
+- **Specific policies** ("we don't service equipment older than 20 years") — usually not on websites
+- **Tone preferences** — you specify these in Custom Instructions
+- **Service-specific FAQs** — generic FAQs sometimes; specific operational ones almost never
+
+For all of these, manual entry is required.
+
+## See also
+
+- [Services](/knowledge-base/services) — managing service entries
+- [FAQs](/knowledge-base/faqs) — managing FAQ entries
+- [Custom instructions](/dashboard/custom-instructions) — for behavior the KB can't capture
