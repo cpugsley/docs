@@ -17,7 +17,9 @@
             "group": "Get started",
             "pages": [
               "index",
-              "quickstart"
+              "quickstart",
+              "get-started/forwarding",
+              "get-started/going-live"
             ]
           },
           {
@@ -29,6 +31,9 @@
           {
             "group": "Dashboard",
             "pages": [
+              "dashboard/overview",
+              "dashboard/calls",
+              "dashboard/bookings",
               "dashboard/voice-greeting",
               "dashboard/business-hours"
             ]

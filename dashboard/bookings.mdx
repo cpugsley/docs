@@ -1,0 +1,126 @@
+---
+title: "Bookings"
+description: "Appointments booked by your AI receptionist. View, update status, cancel, complete."
+---
+
+Open **Dashboard → Bookings**. This is where every appointment your AI booked lives, with full lifecycle management.
+
+## What appears here
+
+Every appointment the AI scheduled — whether it landed on Google Calendar, Microsoft Calendar, or your CC-native calendar — has a corresponding entry here.
+
+The table shows:
+
+- **Date / Time** — when the appointment is scheduled
+- **Type** — appointment type (e.g., "Consultation", "Repair Visit")
+- **Customer** — name and phone
+- **Status** — current state in the lifecycle (see below)
+
+## Status lifecycle
+
+```
+        Created by AI
+              │
+              ▼
+        ┌─────────────┐
+        │  Confirmed  │ ◀── default after AI books it
+        └─────┬───────┘
+              │
+              ├──→ Reminded   (24h before, automated reminder sent)
+              │
+              ├──→ Completed  (you marked it done after the appointment)
+              │
+              ├──→ No Show    (customer didn't show up)
+              │
+              └──→ Cancelled  (customer or you cancelled)
+```
+
+### Status definitions
+
+| Status | Meaning | Who sets it |
+|---|---|---|
+| **Confirmed** | Default after AI books. Customer expected. | AI on booking |
+| **Reminded** | Reminder sent (SMS/email). | Automated 24h before |
+| **Completed** | Appointment happened. | You, after the appointment |
+| **No Show** | Customer didn't appear. | You, after the appointment |
+| **Cancelled** | Cancelled by customer or you. | Either, anytime before |
+
+## Filters
+
+Across the top of the page:
+
+- **Start Date / End Date** — date range
+- **Status** — filter by current state
+- **Type** — filter by appointment type
+
+Click **Apply** to refresh the table.
+
+## Updating a booking
+
+Click any row to open the **booking detail panel**.
+
+You'll see:
+- Customer info (name, phone, email if collected)
+- Appointment date/time and type
+- Notes (free-form, populated from the call where applicable)
+- Action buttons based on current status
+
+### Action buttons by status
+
+| Current status | Available actions |
+|---|---|
+| Confirmed | **Cancel Booking** · **No Show** · **Mark Complete** |
+| Reminded | **Cancel Booking** · **No Show** · **Mark Complete** |
+| Completed | (view only) |
+| No Show | (view only) |
+| Cancelled | (view only) |
+
+<Note>
+Once you set a terminal status (Completed, No Show, Cancelled), you can't toggle it back. If you set wrong status by mistake, contact support@cloudconcierge.ai.
+</Note>
+
+## Calendar sync
+
+Status changes here propagate to your connected calendar:
+
+- **Cancelled** → calendar event deleted
+- **Completed** → calendar event title gets "[Completed]" prefix (configurable)
+- **No Show** → calendar event title gets "[No Show]" prefix
+
+If you cancel an appointment directly on your Google/Microsoft calendar, CC detects it via webhook and updates the booking status here (usually within 30 seconds).
+
+## Notes field
+
+The Notes field is free-form text the AI populated from the booking conversation:
+
+- Caller-provided context ("My dishwasher is making a grinding noise, started yesterday")
+- Service details ("Asked for extra parking accommodation — has a van")
+- Special requests ("Please call 5 minutes before arrival")
+
+Edit notes anytime to add context for whoever's actually doing the appointment.
+
+## Common workflows
+
+### Daily morning routine
+1. Filter: Date = today, Status = Confirmed
+2. Scan the day's appointments
+3. Print or screenshot if you're going on the road
+
+### End-of-day cleanup
+1. Filter: Date = today
+2. For each appointment that happened: Mark Complete
+3. For no-shows: mark No Show (so the metric is accurate)
+
+### Spotting cancellation patterns
+1. Filter: Status = Cancelled, Date = last 30 days
+2. Look for recurring reasons in Notes
+3. Update your custom instructions or FAQs to address the root cause
+
+## What the AI does with this
+
+When a returning caller (matched by phone) calls again:
+- AI can reference past appointments ("I see you had a consultation last month")
+- AI can reschedule existing appointments instead of creating new ones (Bug #29 fix queued — see [troubleshooting](/troubleshooting/common-issues))
+- AI can offer the same type of service ("Same as last time?")
+
+This makes returning customers feel known, not anonymous.

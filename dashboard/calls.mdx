@@ -1,0 +1,113 @@
+---
+title: "Calls"
+description: "Every call your AI receptionist handled, with transcripts, summaries, sentiment, and recordings."
+---
+
+Open **Dashboard → Calls**. Every inbound call (voice or chat) is logged here.
+
+## The call log table
+
+Columns shown by default:
+
+- **Date / Time** — when the call started
+- **Caller** — phone number or "Web Visitor" for chat sessions
+- **Channel** — `voice` (phone) or `chat` (web widget)
+- **Duration** — total call length (excludes hold time before AI pickup)
+- **Summary** — one-line AI-generated summary of the conversation
+- **Tags** — auto-applied tags (e.g., `booking`, `inquiry`, `complaint`)
+- **Sentiment** — 😀 positive · 😐 neutral · 😟 negative (AI-detected)
+- **Status** — `Answered`, `Missed`, `Transferred`, `Abandoned`
+
+Click any row to open the **call detail panel**.
+
+## Filtering and search
+
+- **Search bar** — searches caller phone, summary text, and tags
+- **Tag filter** — narrow to one tag (e.g., show only `booking`)
+- **Channel filter** — `voice` only, `chat` only, or `all`
+- **Date range** — pick start/end dates
+
+Filters combine. Pagination shows 25 calls per page by default.
+
+## Call detail panel
+
+When you click a call, the right panel shows:
+
+### Overview tab
+- Caller info (number, name if known, location if available)
+- Call duration, channel, status
+- AI summary (the one-liner that appears in the table, expanded with context)
+- Tags applied to this call
+- Actions the AI took (booked appointment, looked up customer in CRM, transferred, etc.)
+
+### Transcript tab
+Full turn-by-turn transcript:
+- **AI** turns shown in blue
+- **Caller** turns shown in gray
+- Timestamps on each turn
+
+Click any AI turn to see why it said that (it'll show the knowledge source — service, FAQ, custom instruction, etc.) — **coming soon** in a future release.
+
+### Recording tab
+- **Play** — embedded audio player
+- **Download** — `.wav` file
+- **Delete** — remove the recording (transcript stays)
+
+<Note>
+Recordings are stored in your AWS S3 bucket per your account. Retention is configurable (default: 90 days). To change, contact support.
+</Note>
+
+## Tags
+
+The AI auto-tags calls based on intent:
+
+| Tag | What it means |
+|---|---|
+| `booking` | Caller booked or attempted to book an appointment |
+| `inquiry` | General question, no action taken |
+| `complaint` | Caller expressed dissatisfaction |
+| `transfer` | Call was transferred to a human |
+| `voicemail` | Caller left a voicemail message |
+| `urgent` | AI detected urgency keywords |
+| `unresolved` | AI couldn't fully resolve the issue |
+
+You can also add your own tags manually (click a tag chip → Edit) for filtering later.
+
+## Sentiment
+
+AI-detected emotional tone:
+- **😀 Positive** — caller was satisfied, polite, happy
+- **😐 Neutral** — transactional, no strong emotion
+- **😟 Negative** — frustrated, confused, angry
+
+Use sentiment to spot patterns: are calls getting worse over time? Is one service category generating more frustration? Check Analytics for trends.
+
+## Status flow
+
+| Status | Meaning |
+|---|---|
+| **Answered** | AI handled the call successfully |
+| **Missed** | Phone rang but AI didn't pick up (rare — usually a Connect outage) |
+| **Transferred** | AI routed to a human per a transfer rule |
+| **Abandoned** | Caller hung up mid-conversation |
+
+## Exporting calls
+
+Click the **Export** button (top-right of the table) to download a CSV of the filtered view. Includes caller, summary, sentiment, tags, duration, status. Useful for reporting or feeding into other systems.
+
+## Common workflows
+
+### "I want to listen to today's calls"
+- Filter: Date range = today
+- Sort by Date descending
+- Click each row → Recording tab → Play
+
+### "Where are we losing customers?"
+- Filter: Sentiment = 😟 Negative
+- Read transcripts to find patterns
+- Often reveals missing FAQ or unclear pricing
+
+### "Did we book the appointment for John Doe?"
+- Search: "John Doe" in the search bar
+- Filter: tag = `booking`
+- Open the call → check Actions for "appointment created" + Bookings page for the entry

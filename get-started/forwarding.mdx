@@ -1,0 +1,92 @@
+---
+title: "Forward your business line"
+description: "Route your existing business number to CloudConcierge so callers never know the difference."
+---
+
+CloudConcierge provisions a dedicated business phone number for your account, but most customers want their existing business line to ring through to the AI receptionist instead. That's done via **call forwarding** — a setting you configure with your phone carrier.
+
+## The two paths
+
+### Path 1: Forward all calls (recommended)
+
+Forward your entire business line to your CloudConcierge number. Every call goes to the AI receptionist immediately.
+
+### Path 2: Forward conditional (busy / no-answer / unavailable)
+
+Forward only when you can't pick up. You answer when you can; the AI catches everything else.
+
+<Tip>
+Most customers start with Path 1 for a week, find the AI handles things well, and never switch back. But Path 2 is a safer way to test if you're nervous.
+</Tip>
+
+## Setting up forwarding by carrier
+
+### Major US carriers
+
+Forward-all codes (dial from the line you want to forward):
+
+| Carrier | Enable | Disable |
+|---|---|---|
+| **AT&T** | `*21*<your-CC-number>#` | `#21#` |
+| **Verizon** | `*72<your-CC-number>` | `*73` |
+| **T-Mobile** | `**21*<your-CC-number>#` | `##21#` |
+| **Sprint** (now T-Mobile) | `*72<your-CC-number>` | `*720` |
+
+Conditional forwarding (busy / no answer):
+
+| Carrier | Busy | No answer |
+|---|---|---|
+| **AT&T** | `*67*<your-CC-number>#` | `*61*<your-CC-number>#` |
+| **Verizon** | `*71<your-CC-number>` | `*71<your-CC-number>` |
+| **T-Mobile** | `**67*<your-CC-number>#` | `**61*<your-CC-number>#` |
+
+<Note>
+Replace `<your-CC-number>` with your provisioned CloudConcierge number, including area code, no spaces or dashes. Find it in **Settings → General → Business Phone Number**.
+</Note>
+
+### Business VOIP providers
+
+If you use a hosted PBX or VOIP service (RingCentral, Vonage, Grasshopper, OpenPhone, etc.), forwarding is configured in their admin panel rather than via star codes:
+
+- **RingCentral:** User Settings → Call Forwarding → forward to external number
+- **Vonage:** Phone Settings → Call Forwarding → set forwarding number
+- **Grasshopper:** Extensions → Edit → forwarding rules
+- **OpenPhone:** Phone Settings → Call Forwarding
+
+Look for "Always", "Unconditional", or "All Calls" forwarding mode and enter your CloudConcierge number.
+
+### Landlines (POTS)
+
+Most landline providers support star codes (`*72` enable, `*73` disable). If those don't work, your phone may require menu-driven forwarding — call your provider for assistance.
+
+## Verifying forwarding works
+
+1. From a different phone (or your cell), dial your business line
+2. The AI receptionist should answer with your greeting
+3. If your business line rings instead, forwarding isn't active — re-run the enable code
+
+<Warning>
+If you forward to CloudConcierge but the AI doesn't answer, **disable forwarding immediately** so customers reach a working line. Then check `Dashboard → Settings → General → Business Phone Number` to confirm your CC number is active.
+</Warning>
+
+## Reversing forwarding
+
+To stop forwarding and go back to your line answering directly:
+
+- Dial the disable code for your carrier (table above), OR
+- Toggle forwarding off in your VOIP admin panel
+
+You can re-enable any time. CloudConcierge doesn't "own" your business line — your carrier does, you can change forwarding whenever you want.
+
+## What customers see / hear
+
+- Caller dials your existing business number
+- Carrier forwards the call silently to your CC number
+- AI receptionist answers with your custom greeting
+- Caller has no idea it was forwarded
+
+Caller ID may show your business number or the CC number depending on carrier. Most carriers preserve the original (good — keeps your branding).
+
+## Next: go live
+
+Once forwarding is verified, run through the [going-live checklist](/get-started/going-live).
