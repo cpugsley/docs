@@ -1,0 +1,98 @@
+---
+title: "Switching plans"
+description: "Upgrade, downgrade, switch monthly to annual, and what happens to your minutes mid-cycle."
+---
+
+Open **Billing → Switch Plan** to change subscriptions. CloudConcierge handles all the math (proration, minute carry-over) automatically.
+
+## Upgrading
+
+**Effect:** immediate.
+
+- New plan's minutes become available right away
+- You're charged a **prorated** amount for the rest of the current billing period
+- Next billing cycle is at the new plan rate
+
+**Example:** You're on Starter ($99/mo), 15 days into a 30-day cycle. You upgrade to Professional ($199/mo).
+- Half of Professional remaining = $99.50
+- Half of Starter already paid = $49.50 credit
+- You're charged ~$50 today
+- Next month's bill: full $199 Professional
+
+Used minutes carry over: if you used 150 minutes on Starter (out of 200), the rest of this period you have access to Professional's 500 — minus the 150 already used = 350 remaining.
+
+## Downgrading
+
+**Effect:** at end of current billing period.
+
+We don't downgrade mid-cycle because it would mean cutting your included minutes below what you've already paid for. Cleaner to wait until cycle reset.
+
+You'll see a banner: "Downgrade scheduled. Takes effect on [date]." Cancel the scheduled downgrade anytime before the date.
+
+## Switching monthly to annual
+
+**Effect:** immediate.
+
+- Annual costs ~20% less per month than monthly
+- We refund the unused portion of your current monthly subscription as account credit
+- Annual charge applied immediately (so you'll see a bigger transaction)
+- Next charge is 1 year from today
+
+**Example:** You're 10 days into a $199/mo Professional, then switch to annual ($159/mo = $1,908/year):
+- Refund: $199 × 20/30 = $133 credit
+- Charge: $1,908 - $133 credit = $1,775 today
+- Next charge: 1 year from today, $1,908
+
+Annual subs still get overage billed monthly — see [overage billing](/billing/overage).
+
+## Switching annual to monthly
+
+**Effect:** at end of current annual term.
+
+We don't refund partial annual periods. Your annual continues until renewal, at which point we switch you to the monthly rate.
+
+If you want to switch immediately, contact support@cloudconcierge.ai. We can pro-rate manually but generally don't.
+
+## During trial
+
+You're in your 14-day free trial. You can switch plans freely:
+- No charges during trial
+- Trial day count stays the same regardless of plan
+- The plan you're on when day 15 arrives is the one we charge for
+
+If you started on Professional but realize Starter is enough, switch to Starter on day 13 and the first charge will be $99 (not $199).
+
+## What happens to your CC infrastructure on plan changes
+
+| Resource | Upgrade | Downgrade |
+|---|---|---|
+| Business phone number | Kept | Kept |
+| AI receptionist | Kept, no interruption | Kept, no interruption |
+| Knowledge base content | Kept | Kept |
+| Custom instructions | Kept | Kept |
+| Managed GHL sub-account | Kept (Pro+ only — created if upgrading from Starter) | Suspended if downgrading to Starter (30-day grace before deletion) |
+| Team members | Kept | If over new plan's limit, members keep access until you remove them (we don't auto-remove) |
+| Webhooks + API keys | Kept | Kept |
+| Call history | Kept | Kept |
+
+## Failed plan switch
+
+Stripe occasionally fails to process the proration charge (declined card, etc.):
+
+- The plan switch is **rolled back** — you stay on your current plan
+- Failed payment notification sent to your billing email
+- Fix the payment method, then try the switch again
+
+## Why "Switch Plan" might only show "Cancel"
+
+If you click Switch Plan and the only option is Cancel Subscription (Bug #35), that's a known issue currently in repair. Workaround:
+
+1. Email support@cloudconcierge.ai with the plan you want to switch to
+2. We apply the change manually within 1 business day
+3. Or wait for the fix to ship (queued for upcoming release)
+
+## See also
+
+- [Plans & pricing](/billing/plans-and-pricing) — what each plan includes
+- [Overage billing](/billing/overage) — how minute overage works on monthly vs annual
+- [Cancellation](/billing/cancellation) — closing your account

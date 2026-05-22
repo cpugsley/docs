@@ -70,7 +70,11 @@
           {
             "group": "Billing",
             "pages": [
-              "billing/plans-and-pricing"
+              "billing/plans-and-pricing",
+              "billing/switching-plans",
+              "billing/overage",
+              "billing/cancellation",
+              "billing/payment-methods"
             ]
           },
           {

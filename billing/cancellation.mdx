@@ -1,0 +1,132 @@
+---
+title: "Cancellation"
+description: "How to cancel, what happens to your data, and how the 30-day phone number grace period works."
+---
+
+We don't want you to cancel — but if it's not the right fit, here's how it works. No tricks, no retention call you can't escape.
+
+## How to cancel
+
+<Steps>
+  <Step title="Open Billing → Cancel Subscription">
+    Owner role required.
+  </Step>
+  <Step title="Confirm cancellation reason">
+    Optional but helpful. Tells us what to improve.
+  </Step>
+  <Step title="Confirm">
+    Click "Yes, cancel my subscription."
+  </Step>
+  <Step title="Confirmation email">
+    You get a confirmation with cancellation effective date.
+  </Step>
+</Steps>
+
+## When cancellation takes effect
+
+**Monthly plan:** at the end of your current billing period. You keep access until then.
+
+**Annual plan:** at the end of your current annual term. No partial refunds for annual.
+
+**During trial (no charges yet):** immediately. Account closes same day.
+
+You can **re-subscribe** anytime before the cancellation effective date — just click "Resume subscription" in Billing.
+
+## What happens to your business phone number
+
+This is the part most people care about.
+
+```
+Cancellation effective date
+        │
+        ▼
++-------------------+
+| GRACE PERIOD      |
+| 30 days           |
+| Your number is    |
+| reserved          |
+| but unused        |
++-------------------+
+        │
+        ▼ (after 30 days)
++-------------------+
+| Number released   |
+| back to carrier   |
+| Cannot be         |
+| reclaimed by us   |
++-------------------+
+```
+
+**During the 30-day grace period:**
+- Your number is **not** answering calls
+- You can resubscribe and keep the same number
+- We don't release it to anyone else
+
+**After 30 days:**
+- Number goes back to the carrier pool
+- Someone else may claim it eventually
+- If you resubscribe later, you'll get a new number
+
+<Tip>
+If you're cancelling because of budget but want to keep the number, contact support@cloudconcierge.ai — we can sometimes work out a "pause" arrangement where you pay a small monthly fee just to hold the number.
+</Tip>
+
+## What happens to your data
+
+| Data type | Cancellation date | After 30-day grace |
+|---|---|---|
+| Call recordings | Kept | **Deleted** |
+| Call transcripts | Kept | Deleted |
+| Bookings history | Kept | Deleted |
+| Knowledge base content | Kept | Deleted |
+| CRM contacts (in CC's local CallerProfiles) | Kept | Deleted |
+| CRM contacts (in HubSpot/GHL) | **NOT TOUCHED** — your CRM, your data | NOT TOUCHED |
+| Managed GHL sub-account (Pro+) | Suspended | Deleted |
+| Dashboard access | Read-only | Closed |
+| Webhooks | Disabled at cancellation | Deleted |
+| API keys | Disabled at cancellation | Deleted |
+
+## Export your data before cancellation
+
+We strongly recommend exporting:
+
+1. **Call log:** Dashboard → Calls → Export CSV (filtered to "all time")
+2. **Bookings:** Dashboard → Bookings → Export CSV
+3. **Recordings:** Click each call → Recording tab → Download. Or contact support@cloudconcierge.ai for a bulk export (~$0 for a few hundred recordings, larger requests by case).
+
+You have 30 days from cancellation to do this. After that, recordings are gone.
+
+## Reactivating after cancellation
+
+**Within 30 days:** resubscribe in the dashboard. Same number, same data, no setup.
+
+**After 30 days:** sign up fresh. New number, no historical data. We can transfer your knowledge base content if you contact support before cancellation — saves rebuilding.
+
+## What about the trial?
+
+If you cancel during your 14-day free trial:
+- Account closes immediately (no grace period — there was no number activity to grace)
+- No charges (you weren't billed yet)
+- Knowledge base content + settings deleted within 7 days
+- No data export complexity (you have nothing meaningful yet)
+
+## Asking for a refund
+
+We don't routinely refund — once a billing period starts, we've committed compute/storage/carrier costs for the period.
+
+Exceptions we'll consider:
+- **Service outage** that prevented you from using CC for a meaningful portion of a billing period
+- **Major bug** that broke your ability to operate (e.g., calls weren't being answered, no notifications were sent, etc.)
+- **Annual subscription mistakes** within 30 days of switching to annual (we can prorate back to monthly)
+
+Email support@cloudconcierge.ai with the situation and we'll talk.
+
+## Won't take the cancellation personally
+
+We'd love to know why you're leaving — the cancellation reason field helps us improve. But there's no retention pressure. We respect your decision. Reach back out if your needs change.
+
+## See also
+
+- [Plans & pricing](/billing/plans-and-pricing)
+- [Switching plans](/billing/switching-plans) — downgrading might be a better fit than cancelling
+- [Payment methods](/billing/payment-methods) — if you're cancelling due to a payment issue, fix the card first

@@ -1,0 +1,133 @@
+---
+title: "Payment methods"
+description: "Manage your credit card, ACH, invoice billing, and what happens when a payment fails."
+---
+
+CloudConcierge billing runs through Stripe. All payment-related operations happen via the Stripe-hosted billing portal — secure, PCI-compliant, no card data ever touches our servers.
+
+## Supported payment methods
+
+- **Credit / debit card** — Visa, Mastercard, Amex, Discover. Most common.
+- **ACH (US bank transfer)** — for annual plans only, by invoice request. Contact support.
+- **Invoice billing (Net 30)** — for Business plan annual, by request. Contact support.
+
+## Updating your card
+
+<Steps>
+  <Step title="Open Billing → Update Payment Method">
+    Owner role required.
+  </Step>
+  <Step title="Redirects to Stripe portal">
+    Secure form hosted by Stripe.
+  </Step>
+  <Step title="Enter new card details">
+    Card number, expiration, CVC, zip.
+  </Step>
+  <Step title="Save">
+    New card becomes default; old card removed.
+  </Step>
+</Steps>
+
+Changes take effect immediately. Your next subscription charge and any pending overage will use the new card.
+
+## Multiple cards / backup card
+
+Stripe supports multiple cards on file. We don't expose this in our dashboard yet — if you need a backup card for failover, contact support@cloudconcierge.ai and we can add it via the Stripe portal.
+
+## Failed payments
+
+When a charge fails (declined, insufficient funds, expired card, etc.):
+
+```
+Attempt 1 (day 0)      Failure → status: past_due
+       │
+       ▼ 3 days later
+Attempt 2 (day 3)      Failure → reminder email sent
+       │
+       ▼ 5 days later
+Attempt 3 (day 8)      Failure → reminder email
+       │
+       ▼ 7 days later
+Attempt 4 (day 15)     Failure → final reminder
+       │
+       ▼
+Day 30: status flips to suspended
+         AI receptionist stops answering calls
+```
+
+You have **30 days** to fix the payment from when the first charge fails. During that window:
+- Dashboard shows a red banner: "Payment failed — update your card"
+- Service continues (we don't suspend until day 30)
+- Multiple emails sent to your billing email + tenant owner email
+
+Fix the card **anytime** during the 30-day window to resume normal billing. The next attempted charge usually succeeds within 1 hour of card update.
+
+## Suspension
+
+If 30 days pass without a successful payment:
+- Account status: `restricted`
+- AI receptionist stops answering calls
+- Dashboard still accessible (read-only)
+- Phone number still reserved (we don't release immediately)
+
+Pay the outstanding balance + update card → service resumes within ~1 hour.
+
+If 60 more days pass without resolution → account moves to cancellation flow → 30-day grace → number released.
+
+So the total worst-case timeline from first failed payment to lost number: ~120 days. Plenty of time to react.
+
+## Billing email
+
+Where invoices and payment-failure notifications go:
+
+**Settings → Billing → Billing Email.**
+
+Default: your owner email. You can change to a different email (e.g., bookkeeper@yourbusiness.com) — useful if billing should go to a different person than the operator.
+
+We send to this email:
+- Receipts after successful charges
+- Payment failure notifications
+- Plan change confirmations
+- Cancellation confirmations
+
+We don't send marketing email to this address — only billing-related.
+
+## Invoices
+
+**Billing → Invoices** lists all past charges:
+- Date
+- Description (subscription / overage / one-time)
+- Amount
+- Status (paid / refunded / failed)
+- Download PDF
+
+Useful for bookkeeping. Each invoice has a downloadable PDF compatible with most accounting systems.
+
+## Auto-pay vs manual pay
+
+Default: **auto-pay on file**. We charge automatically on your billing cycle.
+
+If you'd prefer manual approval (some businesses' finance policies require this) — contact support to switch to invoice billing. We'll send an invoice each cycle that you pay manually within 30 days.
+
+## Refunds
+
+Refunds processed back to the original card take 5-10 business days. We can't reverse this; once we initiate the refund, Stripe handles the timing.
+
+For ACH or wire refunds, contact support — these are processed manually and take 7-14 business days.
+
+## Trial: no payment method required
+
+During your 14-day trial, no card is required. We ask for a card only when:
+- Trial ends and you continue with a paid plan
+- You upgrade from trial to a paid plan before trial expiration
+
+If your trial expires without a payment method, the account is suspended (read-only) until you add one.
+
+## Security
+
+- All card data stored in Stripe (PCI Level 1 certified)
+- CloudConcierge **never** stores card numbers
+- All payment operations go through Stripe-hosted UI (we can't even build a form that touches card data even if we wanted to)
+- Stripe customer IDs are stored in our DynamoDB; that's the link between your account and your payment data
+
+If you have security questions about how billing data is handled, see our [data and privacy](/concepts/data-and-privacy) page or email support.
