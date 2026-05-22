@@ -11,17 +11,6 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Changelog",
-        "groups": [
-          {
-            "group": "Changelog",
-            "pages": [
-              "changelog/overview"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "Guides",
         "groups": [
           {
@@ -104,6 +93,17 @@
             "group": "Troubleshooting",
             "pages": [
               "troubleshooting/common-issues"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog/overview"
             ]
           }
         ]
