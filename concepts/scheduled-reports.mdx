@@ -1,0 +1,110 @@
+---
+title: "Scheduled reports"
+description: "How CloudConcierge decides when to send your daily and weekly digest emails."
+---
+
+CloudConcierge sends two types of recurring digest emails:
+
+- **Daily digest** — once per day, summary of yesterday's call activity
+- **Weekly digest** — once per week (Mondays), summary of the past 7 days
+
+This page explains exactly when they arrive, how timezones work, and how to control your subscriptions.
+
+## Delivery windows
+
+| Digest | Delivery window | Day |
+|---|---|---|
+| Daily | 5:00 PM – 6:59 PM | Every day |
+| Weekly | 7:00 AM – 8:59 AM | Mondays only |
+
+Times are in **your business timezone** (configured under Settings, General). If your timezone is `America/Los_Angeles`, the daily digest arrives between 5–7 PM Pacific. If you're in `Europe/London`, it's 5–7 PM London time. Daylight Saving Time is handled automatically.
+
+## What's in each digest
+
+### Daily digest
+Sent after the close of business so you can review the day:
+
+- Total calls handled
+- New bookings made
+- Sentiment breakdown (positive / neutral / negative)
+- Top intents (booking, inquiry, complaint, etc.)
+- Notable calls (negative sentiment or unresolved)
+- Links to dive into specific calls
+
+### Weekly digest
+Sent Monday morning so you can plan the week:
+
+- Week-over-week trend on call volume
+- Booking conversion rate
+- Top failed queries (questions the AI struggled with — your FAQ backlog)
+- Hours of peak call volume
+- Comparison to your account average
+
+## How the timing actually works
+
+A bit more detail for the curious:
+
+```
+            ┌──────────────────────────────────┐
+            │   Hourly cron at minute 0 UTC    │
+            └──────────────┬───────────────────┘
+                           │  every hour
+                           ▼
+            ┌──────────────────────────────────┐
+            │  For every digest subscriber:    │
+            │  1. Convert UTC to tenant local  │
+            │     time (DST-safe)              │
+            │  2. Is local time in the         │
+            │     delivery window?             │
+            │  3. Have we already sent today?  │
+            │  4. If yes/no/no → dispatch      │
+            └──────────────┬───────────────────┘
+                           │  if conditions met
+                           ▼
+            ┌──────────────────────────────────┐
+            │  Aggregate call data + send      │
+            │  email via SES                   │
+            │  Mark date sent (prevents dupes) │
+            └──────────────────────────────────┘
+```
+
+**Why an hour-wide window?** Because the scheduler runs once per hour, your digest arrives anywhere within the 2-hour window. Most tenants get it around 5:00–5:15 PM local. The window provides slack for AWS scheduler jitter, DST edge cases, and brief outages — you'll never miss a digest because of a 15-minute hiccup.
+
+**Why Mondays for weekly?** Most people review the prior week first thing Monday. Tuesday felt too late. Sunday felt too soon.
+
+## Subscribing or unsubscribing
+
+Open **Account, Notifications** (top-right user menu).
+
+For each digest type, toggle the email checkbox:
+
+- **Daily digest — email** (default: on for owners)
+- **Weekly digest — email** (default: on for owners)
+
+Changes take effect immediately. You can subscribe and unsubscribe per team member — each user manages their own notification preferences. Owners and team members all see the same content; we just deliver one email per subscribed recipient.
+
+Unsubscribing from a digest does NOT affect other notifications (call summary, missed call, etc.). Those are independent toggles.
+
+## When you might not receive a digest
+
+A digest does NOT arrive if:
+
+1. **No subscribers configured.** Account, Notifications shows your toggles but they have to be saved. If you're brand new and never visited the Notifications page, defaults apply but check that they're actually saved as set.
+2. **No call activity for the period.** We skip empty digests — if you had zero calls yesterday, no daily digest goes out. (Some tenants prefer this; let support know if you want the empty-digest behavior changed.)
+3. **Email delivery failed.** Check your spam folder. If repeatedly bouncing, your account is flagged and we email you about it.
+4. **Your timezone is unset.** Defaults to `America/New_York` if blank. Set it in Settings, General to get correct local-time delivery.
+
+## Changing delivery time
+
+The delivery windows (5–7 PM daily, Monday 7–9 AM weekly) are fixed. We picked them based on what most SMB operators reported as the time they actually have a minute to read email.
+
+If you'd like configurable delivery times, vote on the feature request or contact support. Once enough customers ask, we'll prioritize it.
+
+## Retroactive digests
+
+We don't backfill missed digests. If your account was suspended for a day or you only just turned on the subscription, you start receiving digests from today forward. Past data is always available in **Dashboard, Analytics**.
+
+## See also
+
+- [Account, Notifications](/dashboard/account-profile) — manage your notification subscriptions
+- [Analytics](/dashboard/analytics) — interactive version of the digest data, on-demand

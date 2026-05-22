@@ -26,6 +26,7 @@
             "group": "Concepts",
             "pages": [
               "concepts/ai-receptionist",
+              "concepts/scheduled-reports",
               "concepts/data-and-privacy",
               "concepts/white-label"
             ]
