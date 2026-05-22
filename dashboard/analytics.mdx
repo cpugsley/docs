@@ -1,0 +1,109 @@
+---
+title: "Analytics"
+description: "Trends over time — call volume, peak hours, sentiment mix, top intents. Spot patterns before they become problems."
+---
+
+Open **Dashboard → Analytics** for charts and trend data.
+
+## Time range selector
+
+Top-right, pick a range:
+- Last 7 days
+- Last 30 days (default)
+- Last 90 days
+- This month
+- Last month
+- Custom range
+
+All charts respect the selected range. Hover any chart point for exact values.
+
+## Two tabs
+
+### Overview tab
+Big-picture metrics at a glance.
+
+### Reports tab
+Deeper dives, per-feature breakdowns, exports.
+
+## Overview charts
+
+### Calls Per Day
+Bar chart showing daily call volume. Look for:
+- **Spikes** — marketing campaign? Industry event? Bad news (lots of complaints)?
+- **Drops** — phone forwarding broken? Holiday slow? Marketing dried up?
+- **Trends** — slow climb is good; flat is fine; steady decline needs investigation
+
+### Call Volume by Hour
+Heatmap of when calls come in. Use this to:
+- Decide your business hours (extend if you're busy after-hours)
+- Spot after-hours volume (CC handles it — but maybe humans should be available too)
+- Plan staffing if you have humans on-call
+
+### Sentiment Breakdown
+Pie chart: 😀 positive / 😐 neutral / 😟 negative.
+
+**Healthy:** ~70% neutral, 20% positive, 10% negative.
+**Concerning:** >25% negative — review the negative call transcripts for patterns.
+
+### Top intents
+What callers are calling about. Auto-categorized:
+- Booking new appointment
+- Inquiry (pricing, hours, services)
+- Existing appointment (reschedule/cancel)
+- Complaint
+- Sales/marketing call (yes, these come through too)
+- Other
+
+Use this to prioritize what to document better. If 30% of calls are about pricing, your services page needs clearer prices.
+
+## Reports tab
+
+### Average call duration
+Trend over time. Watch for:
+- **Going up** — AI taking longer to resolve (knowledge base gaps?)
+- **Going down** — AI getting more efficient OR callers hanging up sooner (concern if negative sentiment is also up)
+
+### Conversion: calls → bookings
+Of calls that should have led to a booking (based on AI-detected intent), what % actually booked?
+
+**Healthy:** 60-80% for service businesses.
+**Concerning:** <50% — calendar issues? Pricing pushback? AI struggling to close?
+
+### Average sentiment score
+0-10 scale, trended over time. A single dip is noise. Sustained drop is signal.
+
+### Top FAQs hit
+Which of your FAQs are getting the most use. Lets you:
+- Move popular FAQs to better placement
+- Identify obsolete FAQs (zero hits = consider removing)
+
+### Top failed queries
+Questions callers asked that the AI couldn't answer confidently. **This is your prioritized list of FAQs to add.** Treat this like a backlog.
+
+## Exporting
+
+Each chart has an **Export** menu (top-right of the chart):
+- **CSV** — raw data for spreadsheets
+- **PNG** — chart image for presentations
+- **PDF** (Reports tab only) — formatted report
+
+Date range applies to exports.
+
+## Weekly review ritual
+
+Spend 15 minutes every Monday on Analytics:
+
+1. **Calls Per Day** — anything unusual last week?
+2. **Sentiment Breakdown** — negative % rising or stable?
+3. **Top failed queries** — pick 3 to convert into FAQs this week
+4. **Conversion rate** — trending the right direction?
+
+This is one of the highest-leverage uses of your dashboard time.
+
+## Limitations
+
+- **Real-time-ish** — analytics aggregate every 15 minutes, not every call instantly
+- **Per-tenant** — you only see your own data. If you're a multi-location business, you'll see all locations combined unless we set up separate tenants
+- **No comparison ranges yet** — "this week vs last week" overlay coming soon
+
+For now, eyeball the trend lines or use the date-range selector to compare manually.

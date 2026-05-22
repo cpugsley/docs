@@ -1,0 +1,88 @@
+---
+title: "Account & profile"
+description: "Manage your personal account info, password, email, and notification preferences."
+---
+
+Open the **user menu** (your initials, top-right of the dashboard) and click **Account** to manage your personal account.
+
+## Profile section
+
+- **Full name** — displayed in the dashboard top bar
+- **Email** — used for sign-in and account communications
+- **Avatar** — uses initials by default; upload a photo for personalization (optional)
+
+Click **Save Changes** after editing.
+
+## Password
+
+Click **Change Password**. You'll be asked for:
+- Current password
+- New password (min 8 chars, requires uppercase + lowercase + number)
+- Confirm new password
+
+Changing your password signs you out of all other devices.
+
+## Email address
+
+To change your sign-in email:
+1. Enter the new email in the Email field
+2. Click **Save Changes**
+3. Check the new email inbox for a verification message
+4. Click the link to confirm
+5. Old email is retired only after the new one verifies
+
+If the verification email doesn't arrive within 5 minutes, check spam or contact support.
+
+## Two-factor authentication (MFA)
+
+**Account → Security → Enable Two-Factor Authentication.**
+
+Steps:
+1. Scan the QR code with an authenticator app (Authy, Google Authenticator, 1Password, Bitwarden)
+2. Enter the 6-digit code from the app
+3. Save your backup codes (we show them once — store them somewhere safe)
+4. MFA is now active on your account
+
+Future sign-ins will prompt for the 6-digit code. Backup codes work if you lose your phone.
+
+<Warning>
+If you lose your authenticator AND your backup codes, contact support@cloudconcierge.ai. Account recovery involves identity verification and takes 1-2 business days.
+</Warning>
+
+## Notification preferences
+
+**Account → Notifications.** Per-notification-type toggles for how you want to be reached:
+
+| Notification | Email | SMS | In-app |
+|---|---|---|---|
+| Call summary (every call) | toggle | toggle | always on |
+| Caller dropped (mid-call hangup) | toggle | toggle | always on |
+| Appointment booked | toggle | toggle | always on |
+| Daily digest | toggle | — | always on |
+| Weekly report | toggle | — | always on |
+
+<Note>
+Notifications system is being repaired (Bug #33). Until the fix ships, in-app dashboard activity is the most reliable signal. See [troubleshooting](/troubleshooting/common-issues#notifications).
+</Note>
+
+## Sessions
+
+**Account → Security → Active Sessions.** Lists devices currently signed into your account, with location and last activity.
+
+- Click **Revoke** on a session to sign that device out immediately.
+- Revoke all sessions if your account may have been compromised — then change your password and re-enable MFA.
+
+## Deleting your account
+
+CloudConcierge isn't built for self-serve account deletion (yet). To close your account:
+
+1. **Cancel any active subscription** via Billing → Cancel Subscription
+2. Email support@cloudconcierge.ai requesting account deletion
+3. We'll confirm via email, then process within 7 business days
+4. Your data (call recordings, transcripts, settings) is purged within 30 days
+
+If you change your mind during the 30-day window, reach out — we can usually restore.
+
+## Tenant-level vs personal
+
+This page is for **your personal account**. For business-level settings (greetings, hours, services, billing), go to the appropriate Dashboard or Settings section. The user menu only manages YOU; tenant-wide changes happen elsewhere and require Owner role.

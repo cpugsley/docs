@@ -1,0 +1,115 @@
+---
+title: "Web chat widget"
+description: "Embed your AI receptionist on your website as a chat widget — same brain as the phone, no separate setup."
+---
+
+CloudConcierge can run as a chat widget on your website. Visitors click to chat, and the AI answers using the same knowledge base + custom instructions as your phone receptionist.
+
+Open **Dashboard → Widget** to configure.
+
+## Live preview
+
+Top of the page shows a real-time preview of how the widget will look on your site. As you change appearance settings (color, position, greeting), the preview updates immediately.
+
+## Customization
+
+### Appearance tab
+- **Primary color** — matches your brand (default: brand blue)
+- **Position** — bottom-right (default), bottom-left, or floating button anywhere
+- **Bubble size** — small, medium (default), large
+- **Avatar** — upload an image or use generated initials
+- **Greeting message** — first thing visitors see when they open the chat
+
+### Behavior tab
+- **Auto-open delay** — open chat after N seconds (0 = never auto-open)
+- **Show on mobile** — toggle widget visibility on small screens
+- **Sound on new message** — play a chime when AI responds
+- **Persist conversation** — remember session across page navigations (recommended)
+
+## Allowed domains
+
+By default the widget works on any domain. To restrict (e.g., only your real site, no embeds on competitor sites):
+
+**Settings → Widget → Allowed Domains**. Add domains one per line:
+```
+yourcompany.com
+www.yourcompany.com
+shop.yourcompany.com
+```
+
+Wildcards supported: `*.yourcompany.com` covers all subdomains.
+
+Embeds from non-allowed domains show an error message.
+
+## Usage limits
+
+Per the Allowed Domains rules above, you can also cap:
+
+- **Concurrent sessions** — max number of simultaneous chats
+- **Daily sessions** — max new chats per 24h
+- **Messages per session** — cap chat length
+
+Useful for cost control on high-traffic sites.
+
+## Installation
+
+### Embed code tab (works on any HTML page)
+
+Copy this snippet, paste before `</body>` on every page where you want the widget:
+
+```html
+<script
+  src="https://widget.cloudconcierge.ai/v1/widget.js"
+  data-tenant-id="YOUR_TENANT_ID"
+  async
+></script>
+```
+
+Your tenant ID is shown in the Installation tab — copy it directly from the dashboard.
+
+### WordPress
+1. Install our official WordPress plugin (search "CloudConcierge" in plugin directory)
+2. Enter your tenant ID in plugin settings
+3. Activate — widget appears on all pages
+
+### Shopify
+1. Settings → Apps → Add custom HTML
+2. Paste the embed code
+3. Save
+
+## How the AI handles web chat differently from phone
+
+The AI's knowledge base is the same, but interaction differs:
+
+- **No voice** — pure text. AI's tone adjusts slightly (less "uh-huh" filler, more bullet points)
+- **Longer responses OK** — phone callers prefer brevity; chat readers prefer detail
+- **Links included** — AI can paste URLs to your docs, products, calendar
+- **Sessions are async** — visitor can step away mid-chat, return 10 min later, AI picks up where it left off (if "Persist conversation" is on)
+
+## Booking from chat
+
+Same as voice — if you've connected a calendar, the AI offers available slots and books appointments via the same flow.
+
+## Cost
+
+Widget conversations count toward your monthly minute allowance:
+
+- 1 minute of AI chat handling = 1 included minute
+- Approximate: a 5-message exchange ≈ 1 minute of usage
+- No charge for opened chats with zero messages
+
+See [plans & pricing](/billing/plans-and-pricing).
+
+## Widget not appearing on your site?
+
+<Warning>
+The widget infrastructure (widget.cloudconcierge.ai DNS + SSL + widget.js) is in active setup as of May 2026. If the embed code doesn't render the widget, the DNS may not be live yet. Track Bug #28 — once the widget subdomain is provisioned, the embed code starts working.
+</Warning>
+
+After provisioning, common issues:
+
+- **Widget doesn't show** — check browser console for CORS errors. Add your domain to Allowed Domains.
+- **Wrong color/position** — clear browser cache; widget reads fresh config every 5 minutes
+- **Chat doesn't send messages** — your tenant ID may be wrong; verify in Installation tab
+
+Contact support@cloudconcierge.ai for issues persisting beyond a few hours.

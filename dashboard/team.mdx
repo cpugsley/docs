@@ -1,0 +1,105 @@
+---
+title: "Team members"
+description: "Invite teammates to your CloudConcierge account, assign roles, and manage permissions."
+---
+
+Open **Settings → Team**. Add coworkers who need to view calls, manage knowledge base, or access billing.
+
+## Roles
+
+CloudConcierge has three roles:
+
+### Owner
+- Full access to everything
+- Manage billing, plan changes, cancellation
+- Invite/remove team members
+- Change tenant-wide settings
+- **Each account has exactly one Owner** — the person who signed up. Ownership can be transferred (see below).
+
+### Admin
+- Full access except billing
+- Can change knowledge base, settings, voice/greeting
+- Can manage calls, bookings, integrations
+- Can invite/remove **Viewers** but not other Admins
+- Cannot access Billing tab
+
+### Viewer
+- Read-only access to dashboard, calls, bookings, analytics
+- Cannot modify settings, knowledge base, integrations, or billing
+- Cannot invite team members
+- Good for: bookkeepers, office managers who need visibility but not control
+
+## Plan limits
+
+| Plan | Total team members (including Owner) |
+|---|---|
+| Starter | 1 (Owner only — no team) |
+| Professional | 3 |
+| Business | 10 |
+
+Exceeded the limit? Upgrade your plan (Settings → Billing → Switch Plan) or remove an inactive member.
+
+## Inviting a team member
+
+<Steps>
+  <Step title="Click Invite Member">
+    Top-right of the Team page (Owner and Admin only).
+  </Step>
+  <Step title="Enter their email">
+    Must be a valid email they can access.
+  </Step>
+  <Step title="Choose a role">
+    Admin or Viewer (Owners can't invite other Owners).
+  </Step>
+  <Step title="Send invite">
+    They get an email with a one-time link to set up their account.
+  </Step>
+</Steps>
+
+Invites expire in 7 days. If unused, send a new one.
+
+## Pending invites
+
+Bottom of the Team page shows invites that haven't been accepted yet. Each has:
+
+- Email invited
+- Role assigned
+- When sent
+- **Resend** button (if delivery may have failed)
+- **Revoke** button (cancels the invite)
+
+<Note>
+Team invite emails currently have delivery issues (Bug #32). Until the notification system is repaired, you may need to send the invite link manually — copy it from the Resend dialog and share via your preferred channel.
+</Note>
+
+## Removing a team member
+
+Click the **⋯** menu next to a member → **Remove**. They lose access immediately. Their personal account isn't affected; only their access to YOUR business account.
+
+## Changing a member's role
+
+Click the **⋯** menu next to a member → **Change role**. Pick Admin or Viewer. Takes effect immediately.
+
+## Transferring ownership
+
+Only the current Owner can transfer:
+
+1. The new Owner must already be an Admin on the team
+2. **Settings → Team → ⋯ menu next to the Admin → Make Owner**
+3. Confirm with your password
+4. Old Owner becomes an Admin automatically (so they still have access)
+
+Useful for: founder transitions, agency clients taking over their own account after onboarding.
+
+## What team members see
+
+- **Owner / Admin:** identical dashboard to yours, including all settings
+- **Viewer:** dashboard, calls, bookings, analytics — but settings/knowledge-base tabs hide edit controls (read-only)
+
+Team members never see billing details unless they're Owner.
+
+## Audit trail
+
+We log significant team actions (invites, role changes, removals) — visible to Owner under **Settings → Team → Activity log** (coming soon).
+
+For now, if you suspect unauthorized changes, contact support@cloudconcierge.ai with the timeframe — we can pull the audit trail from server logs.

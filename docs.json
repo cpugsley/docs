@@ -35,7 +35,17 @@
               "dashboard/calls",
               "dashboard/bookings",
               "dashboard/voice-greeting",
-              "dashboard/business-hours"
+              "dashboard/business-hours",
+              "dashboard/custom-instructions",
+              "dashboard/analytics",
+              "dashboard/widget"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "dashboard/account-profile",
+              "dashboard/team"
             ]
           },
           {

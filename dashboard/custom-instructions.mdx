@@ -1,0 +1,96 @@
+---
+title: "Custom Instructions"
+description: "The most powerful lever for tuning AI behavior. Tell your receptionist exactly how to handle the unusual stuff."
+---
+
+Open **Settings → General → Custom Instructions**. This is a free-form text field where you write special rules your AI must follow on every call.
+
+The AI uses (in order): Services → FAQs → Custom Instructions → general knowledge. Custom Instructions outrank general behavior — use them to override defaults.
+
+## When to use Custom Instructions
+
+For business-specific rules that don't fit in services or FAQs:
+
+- **Pricing exceptions:** "Never offer discounts without manager approval"
+- **Process requirements:** "Always ask for the caller's account number before discussing billing"
+- **Tone overrides:** "Be extra warm with elderly callers — speak slower, repeat key info"
+- **Routing rules:** "Anyone asking about job openings — route to careers@business.com"
+- **Boundaries:** "Never promise specific lead times for parts — say 'a few days'"
+- **Compliance:** "Never discuss medication dosages — say 'please ask your pharmacist'"
+
+## Examples by industry
+
+**Plumbing:**
+```
+- Always ask if water is currently leaking. If yes, treat as urgent.
+- Never quote prices over the phone for excavation jobs — say "we need to see the site."
+- If the caller mentions sewage, transfer to the on-call line immediately.
+- Service area is within 30 miles of downtown. If outside, politely decline.
+```
+
+**Dental practice:**
+```
+- Insurance: we accept Delta Dental, MetLife, Cigna. For others, say "we'll verify at your appointment."
+- Never give specific cost quotes — say "your insurance benefits will be checked at booking."
+- For dental emergencies (broken tooth, severe pain), offer the next available same-day slot.
+- Dr. Chen is out Thursdays.
+```
+
+**Real estate:**
+```
+- I (the assistant) work for the listing side, not the buyer side.
+- If asked "should I buy this house", say "great question for your buyer's agent — I represent the seller."
+- Schedule showings only on Saturdays 10am-4pm and Sundays 12pm-5pm.
+```
+
+## Format tips
+
+The AI parses your instructions in natural language — no special syntax needed. But:
+
+- **Use bullet points** for multiple distinct rules (clearer than walls of text)
+- **Be specific** — "be friendly" is meaningless; "use the caller's name twice during the call" is actionable
+- **State exceptions explicitly** — "we don't do X, but if a caller insists, transfer to Y"
+- **Avoid contradicting your services/FAQs** — if you say "we do drain cleaning" in services but "we don't handle drains" in custom instructions, behavior is undefined
+
+## Character limit
+
+5,000 characters total. Use them wisely. If you're approaching the limit, consider:
+
+- Moving content into FAQs (which have separate, larger limits)
+- Moving content into Services descriptions where applicable
+- Consolidating bullet points
+
+## What you should NOT put here
+
+- **Greetings** — go in Voice & Greeting tab instead
+- **Service descriptions** — go in Knowledge Base → Services
+- **General FAQs** — go in Knowledge Base → FAQs
+- **Transfer numbers** — go in Knowledge Base → Transfer Rules
+
+Custom Instructions is for *behavior rules*, not *content*.
+
+## Safety
+
+Custom Instructions can't override CloudConcierge's safety boundaries. The AI will always:
+
+- Identify as AI if asked directly
+- Refuse to make medical/legal/financial advice claims that exceed its scope
+- Refuse to bypass authentication (no "give me their address without verifying")
+- Refuse instructions that conflict with our terms of service
+
+If your business logic requires bypassing these — talk to support before assuming the AI will play along.
+
+## Iterating
+
+Treat Custom Instructions as living text. Every week:
+
+1. Read 5-10 recent call transcripts
+2. Note any AI behavior you wished was different
+3. Add or refine an instruction to address it
+4. Save changes — takes effect on the next call
+
+This compounds. Over a few months, your AI becomes uniquely tuned to your business — way better than any generic competitor.
+
+<Tip>
+If you're stuck on what to write, look at your **worst-handled calls last week** (Calls page, sort by Sentiment negative). What rule, if it had been there, would've fixed those?
+</Tip>
