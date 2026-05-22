@@ -1,0 +1,224 @@
+---
+title: "Webhook payload reference"
+description: "Exact JSON shapes for every webhook event CloudConcierge emits."
+---
+
+This is the canonical reference for what's in each webhook payload. For setup and signature verification, see [Webhooks](/integrations/webhooks).
+
+## Common envelope
+
+Every webhook POST has this outer structure:
+
+```json
+{
+  "event": "string (event name)",
+  "timestamp": "string (ISO 8601, e.g. 2026-05-21T14:32:18.123Z)",
+  "tenantId": "string",
+  "data": { ... event-specific ... }
+}
+```
+
+Headers on every POST:
+
+```http
+Content-Type: application/json
+X-CloudConcierge-Signature: sha256=<hex hmac>
+X-CloudConcierge-Event: <event name>
+X-CloudConcierge-Delivery: <unique delivery ID>
+```
+
+## `call.completed`
+
+Fires after every successfully-handled call (voice or chat).
+
+```json
+{
+  "event": "call.completed",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "callId": "call_xyz789",
+    "callerPhone": "+15551234567",
+    "callerName": "John Doe",
+    "callerEmail": "john@example.com",
+    "channel": "voice",
+    "duration": 234,
+    "summary": "Caller asked about drain cleaning pricing and booked a consultation for Tuesday at 2pm.",
+    "sentiment": "positive",
+    "tags": ["booking", "inquiry"],
+    "outcome": "appointment_booked",
+    "recordingUrl": "https://...presigned-s3-url... (valid 1 hour)",
+    "transcriptUrl": "https://...presigned-s3-url... (valid 1 hour)",
+    "appointmentBooked": {
+      "bookingId": "booking_jkl",
+      "appointmentTypeId": "type_consultation",
+      "slotStart": "2026-05-25T20:00:00Z"
+    },
+    "metadata": {
+      "ringTime": 2.1,
+      "aiHandlingTime": 230,
+      "transferredTo": null
+    }
+  }
+}
+```
+
+**Fields that may be null:**
+- `callerName` — if AI didn't collect a name
+- `callerEmail` — if AI didn't collect an email
+- `transcriptUrl` — for very short calls where transcription was skipped
+- `appointmentBooked` — null if no booking was created
+
+## `call.missed`
+
+Rare — fires when a call comes in but isn't answered (Connect outage, brief downtime).
+
+```json
+{
+  "event": "call.missed",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "callId": "call_xyz789",
+    "callerPhone": "+15551234567",
+    "ringTime": 30.0,
+    "reason": "no_pickup_within_timeout"
+  }
+}
+```
+
+## `appointment.booked`
+
+Fires when AI creates an appointment.
+
+```json
+{
+  "event": "appointment.booked",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "bookingId": "booking_jkl",
+    "appointmentTypeId": "type_consultation",
+    "appointmentTypeName": "Initial Consultation",
+    "callerName": "John Doe",
+    "callerPhone": "+15551234567",
+    "callerEmail": "john@example.com",
+    "callerAddress": "123 Main St, Springfield, OR 97477",
+    "slotStart": "2026-05-25T20:00:00Z",
+    "duration": 30,
+    "notes": "Caller mentioned the issue started yesterday; wants morning slot if possible.",
+    "callId": "call_xyz789",
+    "calendarEventId": "google_cal_event_abc123",
+    "intakeResponses": {
+      "service_type": "drain_cleaning",
+      "urgency": "non_urgent"
+    }
+  }
+}
+```
+
+## `appointment.cancelled`
+
+```json
+{
+  "event": "appointment.cancelled",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "bookingId": "booking_jkl",
+    "cancelledBy": "customer",  // or "tenant" or "system"
+    "reason": "Customer requested reschedule, no new time chosen yet."
+  }
+}
+```
+
+## `appointment.completed`
+
+Fires when you mark an appointment Completed in the dashboard.
+
+```json
+{
+  "event": "appointment.completed",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "bookingId": "booking_jkl",
+    "completedAt": "2026-05-25T21:00:00Z",
+    "completedBy": "user_xyz"  // your team member who marked it
+  }
+}
+```
+
+## `crm.pushed`
+
+Fires after CRM sync (HubSpot or GHL) completes for a call.
+
+```json
+{
+  "event": "crm.pushed",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "callId": "call_xyz789",
+    "crmProvider": "hubspot",
+    "contactId": "12345678",   // provider's contact ID
+    "dealId": "deal_98765",    // null if no deal was created
+    "action": "created"        // or "updated"
+  }
+}
+```
+
+## `caller.dropped`
+
+Fires when caller hangs up mid-conversation. Useful for follow-up automation (send SMS to dropped callers).
+
+```json
+{
+  "event": "caller.dropped",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "callId": "call_xyz789",
+    "callerPhone": "+15551234567",
+    "duration": 23,
+    "lastTopic": "asking about emergency rates",
+    "summary": "Caller hung up mid-pricing conversation. May have been a price-shopping call."
+  }
+}
+```
+
+## Versioning
+
+Payload schemas may add new fields without breaking. Treat your parser as **forward-compatible**:
+
+- Use `.get(key, default)` patterns (don't assume fields exist)
+- Don't fail if you see fields you don't recognize — just ignore them
+- We won't remove or rename fields without a deprecation cycle
+
+When we make breaking changes, you'll be notified 6 months in advance and we'll release a new event version (e.g., `call.completed.v2` running in parallel with `call.completed`).
+
+## Signing
+
+Every payload is HMAC-SHA256 signed with your webhook's signing secret. See [Webhooks → Signature verification](/integrations/webhooks#signature-verification) for code examples.
+
+Always verify in production. Unsigned (or wrongly-signed) payloads could be from anyone.
+
+## Retries
+
+If your endpoint returns non-2xx, we retry with exponential backoff. See [Webhooks → Retry policy](/integrations/webhooks#retry-policy).
+
+`X-CloudConcierge-Delivery` header is the same across retry attempts — use it for idempotency:
+
+```python
+# Pseudo-code: track which deliveries we've already processed
+if delivery_id in processed_deliveries:
+    return 200  # Acknowledge but don't re-process
+mark_processed(delivery_id)
+handle_event(payload)
+return 200
+```
+
+## See also
+
+- [Webhooks](/integrations/webhooks) — setup, signing, retry
+- [API overview](/api/overview) — REST API for active polling

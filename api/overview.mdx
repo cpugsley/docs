@@ -1,0 +1,165 @@
+---
+title: "API overview"
+description: "REST API for programmatic access to your CloudConcierge data. Read calls, manage bookings, configure settings."
+---
+
+CloudConcierge exposes a REST API for advanced use cases: custom dashboards, internal tools, BI pipelines, custom integrations.
+
+For event-driven flows (notify me when X happens), prefer [Webhooks](/integrations/webhooks). For active polling/writing, use the REST API.
+
+## Base URL
+
+```
+https://api.cloudconcierge.ai/v1
+```
+
+All endpoints are HTTPS only. HTTP requests are rejected.
+
+## Authentication
+
+All requests require an API key in the `Authorization` header:
+
+```bash
+curl https://api.cloudconcierge.ai/v1/calls \
+  -H "Authorization: Bearer cck_live_..."
+```
+
+See [API keys](/integrations/api-keys) for creating, scoping, and managing keys.
+
+## Request format
+
+- **Method:** standard HTTP verbs (GET, POST, PUT, DELETE, PATCH)
+- **Content-Type:** `application/json` for POST/PUT/PATCH bodies
+- **Body:** valid JSON
+
+Example:
+
+```bash
+curl -X POST https://api.cloudconcierge.ai/v1/bookings \
+  -H "Authorization: Bearer cck_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "callerPhone": "+15551234567",
+    "appointmentTypeId": "type_abc",
+    "slotStart": "2026-06-15T14:00:00Z"
+  }'
+```
+
+## Response format
+
+All responses are JSON. Standard envelope:
+
+```json
+{
+  "data": { ... },
+  "meta": { "version": "1.0", "requestId": "req_xyz" }
+}
+```
+
+On errors:
+
+```json
+{
+  "error": {
+    "code": "validation_failed",
+    "message": "Phone number must be in E.164 format",
+    "field": "callerPhone"
+  },
+  "meta": { "requestId": "req_xyz" }
+}
+```
+
+Always return the `requestId` to support if you encounter an unexpected error.
+
+## Status codes
+
+| Code | Meaning |
+|---|---|
+| 200 | Success (GET) |
+| 201 | Created (POST returning new resource) |
+| 204 | Success, no content |
+| 400 | Bad request (validation failed) |
+| 401 | Authentication failed |
+| 403 | Authenticated but not authorized for this scope/resource |
+| 404 | Resource not found |
+| 409 | Conflict (e.g., booking slot already taken) |
+| 429 | Rate limit exceeded |
+| 5xx | Server error (retry with exponential backoff) |
+
+## Pagination
+
+List endpoints (`GET /calls`, `GET /bookings`, etc.) support pagination:
+
+- **Query params:** `?limit=50&cursor=eyJ...`
+- **Defaults:** limit=25, cursor=null (first page)
+- **Max limit:** 100
+
+Response includes:
+
+```json
+{
+  "data": [...],
+  "meta": {
+    "nextCursor": "eyJ...",  // null if last page
+    "hasMore": true
+  }
+}
+```
+
+To fetch the next page, pass `cursor=` from the previous response.
+
+## Rate limits
+
+Per API key:
+
+- **Burst:** 600 requests/minute
+- **Sustained:** 6,000 requests/hour
+
+Exceeding limits returns `429 Too Many Requests` with:
+- `Retry-After` header: seconds until you can retry
+- `X-RateLimit-Limit` header: your limit
+- `X-RateLimit-Remaining` header: requests left in window
+
+Respect `Retry-After` — repeated violations result in temporary key suspension.
+
+## Tenant scoping
+
+Your API key is scoped to your tenant. Every request automatically filters to your data.
+
+For multi-tenant integrations (you're a reseller or platform managing multiple tenants), the agency-tier API supports a `X-Tenant-ID` header to operate on specific client tenants. Contact partnerships@cloudconcierge.ai for the agency API.
+
+## Versioning
+
+Current version: **v1**.
+
+We commit to backward compatibility within a major version. Breaking changes get a new version (`/v2`, etc.) with 6 months of overlap.
+
+Deprecated endpoints return a `Sunset` header with the deprecation date.
+
+## SDKs
+
+- **Node.js / TypeScript:** `npm install @cloudconcierge/sdk` (coming)
+- **Python:** `pip install cloudconcierge` (coming)
+- **REST + Postman collection:** [Download our Postman collection](https://api.cloudconcierge.ai/postman.json) (coming)
+
+In the meantime, the API is straightforward REST + JSON — usable from any HTTP client.
+
+## Endpoint reference
+
+| Resource | Common operations |
+|---|---|
+| Calls | List, get detail, get transcript, get recording URL |
+| Bookings | List, get, create, update status, cancel |
+| Tenants | Get my tenant, update settings |
+| Knowledge Base | List/CRUD services, FAQs, transfer rules |
+| Webhooks | List, create, update, delete |
+| Analytics | Get metrics summary, get trend data |
+| Integrations | List, get status |
+
+Detailed reference per endpoint coming in future releases. For now, see [Authentication](/api/authentication) and [Webhooks payload reference](/api/webhooks) for the most-needed details.
+
+## See also
+
+- [Authentication](/api/authentication) — API key auth details
+- [Webhooks payload reference](/api/webhooks) — event payload schemas
+- [API keys](/integrations/api-keys) — creating and managing keys

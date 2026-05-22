@@ -81,6 +81,14 @@
             ]
           },
           {
+            "group": "API",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/webhook-payloads"
+            ]
+          },
+          {
             "group": "Troubleshooting",
             "pages": [
               "troubleshooting/common-issues"

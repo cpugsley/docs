@@ -1,0 +1,142 @@
+---
+title: "Authentication"
+description: "How to authenticate API requests, scope keys, and rotate safely."
+---
+
+CloudConcierge API uses **API key authentication via Bearer tokens**.
+
+## The basics
+
+Every request must include an `Authorization` header:
+
+```http
+Authorization: Bearer cck_live_abc123def456...
+```
+
+If the header is missing, malformed, or contains an invalid/revoked key, you get `401 Unauthorized`.
+
+## Key prefixes
+
+API keys are prefixed to indicate environment:
+
+- `cck_live_*` — production keys, full access per scope
+- `cck_test_*` — test keys, hit sandbox endpoints (some writes are no-ops)
+
+Use test keys for development. Switch to live keys for production.
+
+## Creating keys
+
+See [API keys](/integrations/api-keys) for the full create-and-configure workflow.
+
+Key things to know when creating:
+
+1. **Pick narrow scopes.** A read-only BI tool doesn't need write scopes.
+2. **Set expiration if sensitive.** 90-day expiration for keys with write scopes is good practice.
+3. **Name keys descriptively.** "Internal BI tool v2" not "Key 1."
+4. **Copy the value immediately.** You can't retrieve a full key value after creation — only the prefix for identification.
+
+## Scoping
+
+Scopes determine what an API key can do:
+
+```
+calls:read          → GET /calls, /calls/{id}
+recordings:read     → GET /calls/{id}/recording-url
+bookings:read       → GET /bookings, /bookings/{id}
+bookings:write      → POST/PUT/DELETE /bookings
+settings:read       → GET /tenant
+settings:write      → PUT /tenant
+webhooks:manage     → CRUD /webhooks
+analytics:read      → GET /analytics/*
+*                   → all of the above (use sparingly)
+```
+
+Each request is checked against the key's scopes. Unscoped requests return `403 Forbidden`.
+
+## Security best practices
+
+### Storage
+- **Never commit keys to source control.** Use environment variables, AWS Secrets Manager, Doppler, etc.
+- **Don't put keys in URL query strings.** They show up in logs and referrer headers.
+- **Don't put keys in client-side code** (JavaScript bundles, mobile apps). Always use a backend intermediary.
+
+### Rotation
+- Rotate keys every 90 days minimum
+- Rotate immediately if you suspect compromise
+- During rotation: create new key, deploy new key, verify, then revoke old key
+
+### Audit
+- Review the API Keys panel quarterly
+- Revoke any key not actively used
+- Check the "Last used" timestamp + IP for each key — investigate unfamiliar IPs
+
+## What to do if a key leaks
+
+If a key is exposed (committed to public repo, leaked in logs, screenshotted in chat):
+
+<Steps>
+  <Step title="Revoke immediately">
+    API Keys panel → revoke. Effective in seconds.
+  </Step>
+  <Step title="Check recent usage">
+    Last-used IP and timestamp. Anything unusual?
+  </Step>
+  <Step title="Audit affected data">
+    Based on the key's scopes, what could have been accessed?
+  </Step>
+  <Step title="Create new key">
+    Different prefix, narrower scopes if possible.
+  </Step>
+  <Step title="Update your code">
+    Deploy with the new key.
+  </Step>
+  <Step title="Tell us">
+    Email support@cloudconcierge.ai with the incident — we can pull server-side audit logs to help assess impact.
+  </Step>
+</Steps>
+
+## Test keys vs live keys
+
+Test keys (`cck_test_*`):
+- Read endpoints return live data from your tenant (same as live keys)
+- Write endpoints execute, but some side effects are skipped:
+  - Booking creates land in `Test Bookings` (separate from real Bookings)
+  - Outbound emails to customers are skipped (just logged)
+  - CRM syncs are skipped
+- Useful for verifying your integration logic without affecting real customer data
+
+When you're ready for production, swap the key prefix from `cck_test_*` to `cck_live_*` — same API, same shapes, real side effects.
+
+## OAuth (future)
+
+We don't currently support OAuth for the CloudConcierge API. API keys are sufficient for our use cases. If you need OAuth (e.g., user-level access control in a multi-tenant SaaS built on top of CC), contact us — it's roadmap.
+
+## CORS
+
+Live keys (`cck_live_*`) cannot be used from browser JavaScript — we deny CORS on direct API calls. Always proxy through your backend.
+
+Test keys (`cck_test_*`) allow CORS from `localhost:*` only. For frontend dev convenience.
+
+If you need browser-callable endpoints, expose your own backend that uses CC's API server-side.
+
+## Common errors
+
+### `401 Unauthorized — Missing Authorization header`
+You didn't include `Authorization: Bearer ...`
+
+### `401 Unauthorized — Invalid API key`
+Key value is wrong, malformed, or revoked. Check copy-paste.
+
+### `403 Forbidden — Insufficient scope`
+Key is valid but doesn't have the scope needed for this endpoint. Check key configuration.
+
+### `403 Forbidden — Account suspended`
+Tenant is in `restricted` status (usually due to billing). Resolve in Billing → Update Payment Method.
+
+### `429 Too Many Requests`
+You're rate-limited. Check `X-RateLimit-Remaining` header. Wait per `Retry-After` header.
+
+## See also
+
+- [API keys](/integrations/api-keys) — creating, scoping, rotating
+- [API overview](/api/overview) — base URL, request/response format
