@@ -1,0 +1,195 @@
+---
+title: "Webhooks"
+description: "Subscribe to CloudConcierge events. Get a HTTP POST every time a call completes, an appointment books, or a contact lands in your CRM."
+---
+
+CloudConcierge fires webhooks for major events. Subscribe to the events you care about and we'll POST a signed JSON payload to your endpoint.
+
+## Setting up a webhook
+
+<Steps>
+  <Step title="Open Settings → Integrations → Developer Tools → Webhooks">
+    The Webhooks panel.
+  </Step>
+  <Step title="Click Add Webhook">
+    Add a new endpoint URL.
+  </Step>
+  <Step title="Configure">
+    - **URL** — your endpoint that will receive POSTs (HTTPS required)
+    - **Events** — multi-select which event types to subscribe to
+    - **Description** — internal label for this webhook
+  </Step>
+  <Step title="Copy the signing secret">
+    Shown once after creation — use this to verify payloads on your side.
+  </Step>
+  <Step title="Test the webhook">
+    Click Test — we send a sample payload to verify your endpoint reachable.
+  </Step>
+</Steps>
+
+## Event types
+
+| Event | When it fires |
+|---|---|
+| `call.completed` | After every successful call (voice or chat) |
+| `call.missed` | When a call comes in but isn't answered (rare) |
+| `appointment.booked` | When AI creates an appointment |
+| `appointment.cancelled` | When an appointment is cancelled |
+| `appointment.completed` | When you mark an appointment Completed |
+| `crm.pushed` | After CRM sync (HubSpot/GHL) completes |
+| `caller.dropped` | When a caller hangs up mid-conversation |
+
+## Payload format
+
+All events POST JSON with this envelope:
+
+```json
+{
+  "event": "call.completed",
+  "timestamp": "2026-05-21T14:32:18.123Z",
+  "tenantId": "tenant_abc123",
+  "data": {
+    "callId": "call_xyz789",
+    "callerPhone": "+15551234567",
+    "duration": 234,
+    "summary": "Caller asked about pricing and booked a consultation.",
+    "sentiment": "positive",
+    "tags": ["booking", "inquiry"],
+    "recordingUrl": "https://...presigned-s3-url..."
+  }
+}
+```
+
+The `data` shape varies by event type. See **Event payload reference** below.
+
+## Signature verification
+
+Every webhook POST includes an `X-CloudConcierge-Signature` header with an HMAC-SHA256 signature of the body.
+
+To verify in Node.js:
+
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhook(req, secret) {
+  const signature = req.headers['x-cloudconcierge-signature'];
+  const body = JSON.stringify(req.body);
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(body)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  );
+}
+```
+
+In Python:
+
+```python
+import hmac, hashlib
+
+def verify_webhook(body_bytes, signature_header, secret):
+    expected = 'sha256=' + hmac.new(
+        secret.encode(),
+        body_bytes,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(signature_header, expected)
+```
+
+<Warning>
+Always verify signatures in production. Unsigned webhooks could be spoofed by anyone who knows your endpoint URL.
+</Warning>
+
+## Retry policy
+
+If your endpoint returns 5xx or times out (>30 seconds), we retry with exponential backoff:
+
+- Attempt 1: immediately
+- Attempt 2: 30 seconds later
+- Attempt 3: 5 minutes later
+- Attempt 4: 30 minutes later
+- Attempt 5: 4 hours later
+
+After 5 failed attempts, the event is moved to a dead letter queue. View failed events in Webhooks → Failed Deliveries.
+
+## Acceptable response
+
+Return any **2xx status** (200, 201, 204 all fine). Anything else is treated as a failure.
+
+Response body is ignored. Keep it minimal (`200 OK` with empty body is fine).
+
+## Event payload reference
+
+### `call.completed`
+```json
+{
+  "callId": "string",
+  "callerPhone": "string (E.164)",
+  "callerName": "string | null",
+  "channel": "voice | chat",
+  "duration": "number (seconds)",
+  "summary": "string",
+  "sentiment": "positive | neutral | negative",
+  "tags": ["string"],
+  "outcome": "string",
+  "recordingUrl": "string (presigned, 1-hour TTL)",
+  "transcriptUrl": "string (presigned, 1-hour TTL)"
+}
+```
+
+### `appointment.booked`
+```json
+{
+  "bookingId": "string",
+  "appointmentTypeId": "string",
+  "appointmentTypeName": "string",
+  "callerName": "string",
+  "callerPhone": "string",
+  "callerEmail": "string | null",
+  "slotStart": "string (ISO 8601)",
+  "duration": "number (minutes)",
+  "notes": "string",
+  "callId": "string (the call that booked it)"
+}
+```
+
+### `crm.pushed`
+```json
+{
+  "callId": "string",
+  "crmProvider": "hubspot | ghl",
+  "contactId": "string (provider's contact ID)",
+  "dealId": "string | null",
+  "action": "created | updated"
+}
+```
+
+## Filtering webhooks
+
+If you only want certain events for certain tenants (multi-tenant integrations), filter on your side using `event` and `tenantId` from the envelope.
+
+## Rate limits
+
+Inbound to your endpoint: we send up to **10 POSTs/second** per tenant. Bursts above this queue and back off automatically.
+
+## Disabling / deleting
+
+Webhooks → click ⋯ → Disable (pauses delivery) or Delete (permanent).
+
+Disabled webhooks keep their config — re-enable anytime. Deleted ones are gone.
+
+## Logs
+
+**Webhooks → Logs** shows recent delivery attempts:
+- Timestamp
+- Event type
+- Response status
+- Latency
+- Body excerpt (if non-2xx)
+
+Useful for debugging: "why didn't I get the appointment.booked event?"
+
+Logs retain 30 days.

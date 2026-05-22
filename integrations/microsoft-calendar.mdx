@@ -1,0 +1,99 @@
+---
+title: "Microsoft Calendar (Outlook)"
+description: "Connect Microsoft 365 or Outlook.com so your AI can book appointments into your Outlook calendar."
+---
+
+CloudConcierge supports Microsoft 365 and Outlook.com calendars via OAuth. Works the same as Google Calendar — same booking flow, same availability checking, same event details.
+
+## Connect Microsoft Calendar
+
+1. Open **Settings → Integrations**
+2. Find **Microsoft Calendar** in the Calendar Integrations section
+3. Click **Connect**
+4. A Microsoft sign-in popup appears
+5. Sign in with the Microsoft account that owns the calendar you want CloudConcierge to use
+6. Review the requested permissions:
+   - **Calendars.ReadWrite** — read and create calendar events
+   - **User.Read** — basic profile info (your name, email) for the dashboard
+   - **offline_access** — refresh tokens so we don't need you to re-authorize frequently
+7. Click **Accept**
+8. Popup closes; the integration card shows **Connected ✓**
+
+## Microsoft 365 vs Outlook.com
+
+CloudConcierge works with both:
+
+- **Microsoft 365 (work/school)** — formerly Office 365. Your IT admin may need to approve the CloudConcierge app for your tenant. See "Admin consent" below.
+- **Outlook.com (personal)** — works directly, no admin approval needed.
+
+## Admin consent (Microsoft 365 work/school)
+
+If your org requires admin approval for new third-party apps:
+
+1. The OAuth flow will show "Admin approval required"
+2. Click **Request approval** — Microsoft sends a request to your IT admin
+3. Admin reviews and approves
+4. Return to **Settings → Integrations** and click **Connect** again
+
+Your IT admin can pre-approve CloudConcierge for your whole org via the [Microsoft Entra admin center](https://entra.microsoft.com) → Enterprise applications → CloudConcierge.
+
+## Pick a primary calendar
+
+After connecting, if your Microsoft account has multiple calendars (e.g., personal + work):
+
+**Settings → Integrations → Microsoft Calendar → Set as primary calendar.** Bookings land on the calendar you choose.
+
+<Tip>
+Many Microsoft 365 users have a "Calendar" plus shared mailbox calendars. Make sure you're picking the right one — typically your personal Calendar, not a team's.
+</Tip>
+
+## What the AI does
+
+**During a call:**
+- Caller asks "can I book for Tuesday at 2pm?" → AI checks your Outlook calendar live
+- AI offers available slots based on existing events + your business hours
+- Caller picks → AI creates the event with all details
+
+**Event details:**
+- **Subject** — configurable per appointment type (e.g., "Drain cleaning — John Doe")
+- **Body** — caller name, phone, AI summary of the booking conversation, link to call recording
+- **Duration** — per appointment type
+- **Reminders** — uses your calendar's default reminder settings
+
+## Two-way sync
+
+If you delete or move a CloudConcierge-booked event in Outlook:
+- Within ~30 seconds, the Bookings page reflects the change
+- Status flips to "Cancelled" if you deleted, or shows the new time if you moved
+
+Conversely, status changes you make in the Bookings page (Complete, No Show, Cancel) propagate back to your Outlook event title.
+
+## Disconnecting
+
+1. **Settings → Integrations → Microsoft Calendar**
+2. Click **Disconnect**
+3. Confirm
+
+Also revoke the OAuth grant in [Microsoft account permissions](https://account.live.com/consent/Manage) for completeness.
+
+## Troubleshooting
+
+**"AADSTS50105" or similar error during connect**
+- Means your IT admin hasn't approved CloudConcierge for your org. Request admin consent (see above).
+
+**Bookings not appearing on the right calendar**
+- Check Settings → Integrations → Microsoft Calendar → Primary calendar setting
+- Some Outlook setups have multiple "Calendar" entries — pick by name carefully
+
+**Token expired / "please reconnect"**
+- Refresh tokens last 90 days by default (Microsoft policy)
+- Just click **Reconnect** in the integration card
+- If reconnect fails, disconnect fully and reconnect from scratch
+
+## Limitations vs Google Calendar
+
+Functionally equivalent. Same booking flow, same availability checking, same status sync. Pick whichever ecosystem you actually use day-to-day.
+
+If you use **both** Google and Microsoft heavily (different inboxes for different roles), connect both — CloudConcierge respects the **primary** calendar setting. You can change it anytime.
+
+See also: [Google Calendar setup](/integrations/google-calendar)

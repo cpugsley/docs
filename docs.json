@@ -59,7 +59,12 @@
           {
             "group": "Integrations",
             "pages": [
-              "integrations/google-calendar"
+              "integrations/google-calendar",
+              "integrations/microsoft-calendar",
+              "integrations/hubspot",
+              "integrations/gohighlevel",
+              "integrations/webhooks",
+              "integrations/api-keys"
             ]
           },
           {

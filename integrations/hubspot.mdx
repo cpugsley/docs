@@ -1,0 +1,118 @@
+---
+title: "HubSpot CRM"
+description: "Bring your own HubSpot account — CloudConcierge pushes call data to your CRM so contacts, activities, and deals stay in sync."
+---
+
+CloudConcierge integrates with **HubSpot** via OAuth — Bring Your Own CRM (BYOC). Works on all CloudConcierge plans, with any HubSpot tier (Free, Starter, Professional, Enterprise).
+
+## What syncs to HubSpot
+
+After every call:
+
+1. **Contact created or updated** — caller's phone, name, email (if collected), source = "CloudConcierge AI"
+2. **Call activity logged** — call duration, AI summary, sentiment, tags, recording URL
+3. **Deal created (optional)** — if the call resulted in a booking and you enable deal creation in CRM Config
+
+## Connect HubSpot
+
+<Steps>
+  <Step title="Open Settings → Integrations">
+    Scroll to the **CRM** section.
+  </Step>
+  <Step title="Click Connect on HubSpot">
+    A HubSpot OAuth popup opens.
+  </Step>
+  <Step title="Sign in to HubSpot">
+    Use the HubSpot account that owns the CRM you want to sync to.
+  </Step>
+  <Step title="Pick a HubSpot account">
+    If you have multiple HubSpot portals, pick which one.
+  </Step>
+  <Step title="Review and accept permissions">
+    See "Required scopes" below.
+  </Step>
+  <Step title="Configure mapping">
+    After auth completes, the **CRM Config** panel appears for fine-tuning.
+  </Step>
+</Steps>
+
+## Required scopes
+
+CloudConcierge requests these HubSpot scopes:
+
+- `crm.objects.contacts.read` — find existing contacts to update
+- `crm.objects.contacts.write` — create new contacts from callers
+- `crm.objects.deals.read` — check if a related deal exists
+- `crm.objects.deals.write` — create deals when callers book appointments
+
+We do **not** request access to Companies, Tickets, Marketing Hub, or other HubSpot objects.
+
+## CRM Config panel (after connecting)
+
+Fine-tune how CloudConcierge interacts with HubSpot:
+
+- **Create contact for new callers** (default: on) — auto-create HubSpot contact for first-time callers
+- **Update contact for returning callers** (default: on) — refresh fields if we learn new info
+- **Log call activity** (default: on) — write call summary as a HubSpot activity timeline entry
+- **Create deal when appointment is booked** (default: off) — opt-in for sales pipelines
+
+If "Create deal" is enabled, pick:
+- **Pipeline** (dropdown, fetched live from HubSpot)
+- **Stage** (dropdown, populated based on pipeline)
+
+Deals are created with caller name + appointment type as the deal name.
+
+## HubSpot Free tier limits
+
+Heads up if you're on the HubSpot **Free** tier:
+
+| Limit | Free tier | Impact |
+|---|---|---|
+| Custom properties | 10 max | We use up to 5 for `cc_*` fields |
+| Contact cap | 1,000 contacts | High-call-volume tenants hit this fast |
+| Workflows / automation | Not available | No CC-triggered HubSpot workflows |
+
+We don't create more than 5 custom properties (`cc_last_call_summary`, `cc_last_call_date`, `cc_call_count`, `cc_last_sentiment`, `cc_last_caller_intent`). For per-call detail, we use HubSpot's native engagement notes.
+
+If you're approaching the 1,000-contact cap, the CRM Health widget (Settings → Integrations) warns you.
+
+## HubSpot Starter / Pro / Enterprise
+
+Same CC functionality, no special perks at higher tiers (we're vendor-neutral).
+
+However, HubSpot Pro+ unlocks Workflows — you can build automations like "When CC creates a contact tagged `urgent`, send a Slack notification" entirely within HubSpot. CC doesn't trigger workflows directly; you build them on top of the contact/activity data we sync.
+
+## Two-way sync?
+
+CloudConcierge → HubSpot: yes (we push call data).
+
+HubSpot → CloudConcierge: limited. We don't read contact updates from HubSpot back into CC. Caller context the AI uses on the next call comes from CC's local CallerProfiles table, not from HubSpot.
+
+If you want CC to know about HubSpot lifecycle stages (e.g., "this caller is a customer, not a prospect"), enable the **Pre-call CRM lookup** option in CRM Config — CC will query HubSpot at call start for the caller's lifecycle stage and inject it into the AI's context.
+
+## Disconnecting
+
+**Settings → Integrations → HubSpot → Disconnect.**
+
+After disconnecting:
+- No new call data syncs to HubSpot
+- Existing HubSpot contacts and activities remain (we don't delete anything)
+- Custom properties (`cc_*`) remain on contacts but aren't updated
+
+## Troubleshooting
+
+**OAuth fails with "Couldn't connect HubSpot"**
+- Verify you have permission to install apps in your HubSpot portal (some restricted portals require admin)
+
+**Contacts not appearing in HubSpot**
+- Wait 2-3 minutes — CRM push is async via SQS
+- Check **Settings → Integrations → HubSpot → CRM Health** for sync errors
+- If still missing, contact support
+
+**Disconnect/reconnect shows DNS error (Bug #38)**
+- Known issue currently in repair
+- Workaround: contact support@cloudconcierge.ai to manually reset
+
+**Some contact fields missing**
+- HubSpot Free tier hides certain properties at the API level — your CC custom property data still saves, just may not display in standard views
+- Edit your HubSpot contact view to include `cc_*` properties

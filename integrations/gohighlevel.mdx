@@ -1,0 +1,137 @@
+---
+title: "GoHighLevel (GHL)"
+description: "BYOC + Managed GHL. We can use your existing GHL account, or set up one for you on Professional+ plans."
+---
+
+CloudConcierge integrates with **GoHighLevel** in two modes. Pick the one that matches your situation.
+
+## Two modes
+
+### Mode 1: BYOC (Bring Your Own GHL)
+
+You have an existing GHL account/sub-account. CloudConcierge connects via OAuth and pushes call data into your CRM.
+
+**Available on:** all plans
+
+### Mode 2: Managed GHL
+
+You don't have GHL. CloudConcierge **provisions a sub-account for you** in our Agency account and pre-configures pipelines, calendar, custom fields. White-labeled — appears as "CloudConcierge CRM" to you, no GHL branding visible.
+
+**Available on:** Professional and Business plans only (included)
+
+## GHL is unique: CRM + Calendar in one
+
+Unlike HubSpot, GHL implements both CRM and Calendar interfaces in CloudConcierge. If you use Managed GHL:
+
+- No need to connect Google or Microsoft Calendar separately
+- The GHL calendar serves as your scheduling system AND your CRM
+- One integration, one place to look
+
+If you prefer keeping your existing Google/Outlook calendar and just using GHL for CRM, you can — see "Calendar choice" below.
+
+## BYOC setup
+
+<Steps>
+  <Step title="Open Settings → Integrations">
+    Find **GoHighLevel** in the CRM section.
+  </Step>
+  <Step title="Choose 'Connect my existing GHL account'">
+    From the GHL onboarding dialog.
+  </Step>
+  <Step title="Sign in to GHL via OAuth">
+    Pick the GHL location (sub-account) to connect.
+  </Step>
+  <Step title="Review and accept permissions">
+    See "Required scopes" below.
+  </Step>
+  <Step title="Configure mapping">
+    CRM Config panel appears for tuning.
+  </Step>
+</Steps>
+
+### Required scopes (BYOC)
+- `contacts.readonly` `contacts.write` — read and create contacts
+- `opportunities.readonly` `opportunities.write` — create deals when appointments book
+- `calendars.readonly` `calendars.write` — for calendar integration
+- `calendars/events.readonly` `calendars/events.write` — for booking appointments
+- `locations.readonly` — read your sub-account info
+
+## Managed setup
+
+<Steps>
+  <Step title="Subscribe to Professional or Business">
+    Managed GHL is included; not available on Starter.
+  </Step>
+  <Step title="Open Settings → Integrations">
+    Find **GoHighLevel**.
+  </Step>
+  <Step title="Choose 'Set up a new CRM for me'">
+    From the GHL onboarding dialog.
+  </Step>
+  <Step title="Provisioning runs (takes ~30 seconds)">
+    Progress shown live: "Creating your CRM... Setting up calendar... Configuring pipeline... Adding custom fields..."
+  </Step>
+  <Step title="Done">
+    Your GHL sub-account is ready. CloudConcierge has full access via Agency credentials — no OAuth needed.
+  </Step>
+</Steps>
+
+### What gets pre-configured (Managed)
+
+- **Location** (GHL term for sub-account) — your business name, address, timezone
+- **Calendar** — default calendar named after your business
+- **Pipeline:** "Inbound Leads" with stages New Lead → Appointment Scheduled → Completed → Won/Lost
+- **Custom fields** — `cc_call_sentiment`, `cc_call_tags`, `cc_source`, `cc_last_call_summary`
+- **Default automations** — none. We don't pre-build workflows; you can if you want.
+
+## Calendar choice
+
+If you have an existing calendar connected (Google or Microsoft):
+
+When you set up GHL, CC will ask:
+- **Use GHL calendar** — replaces your existing primary calendar
+- **Use GHL for CRM only** — keep Google/Outlook as primary, GHL handles CRM
+
+**Default:** for fresh accounts, GHL calendar. For existing accounts with another calendar, "CRM only" (don't break what works).
+
+## What syncs to GHL
+
+After every call:
+
+1. **Contact** created (or matched if existing) by phone
+2. **Note** added to contact with AI summary, sentiment, tags, recording URL
+3. **Opportunity** created in pipeline (if "Create deal on appointment" enabled and call resulted in booking)
+
+## CRM Config panel
+
+Same as HubSpot — toggle which fields sync, pick the pipeline + default stage for opportunities. Pipelines and stages are fetched live from your GHL account.
+
+## Managed GHL cost
+
+Built into your Professional ($199/mo) or Business ($349/mo) plan. No extra fee. You get an unrestricted GHL sub-account with no platform-fee passthrough.
+
+If you cancel CloudConcierge:
+- Your sub-account is **suspended** immediately (data preserved)
+- After 30 days, the sub-account is deleted (carrier release)
+- You can export contacts during the 30-day window — contact support
+
+## Disconnecting
+
+**BYOC mode:** Settings → Integrations → GoHighLevel → Disconnect. Standard OAuth revoke.
+
+**Managed mode:** can't disconnect without canceling the CC subscription (it's tied to your plan). To "disconnect" Managed GHL, downgrade to Starter — sub-account is auto-suspended.
+
+## Troubleshooting
+
+**Provisioning fails with "Failed to create location"**
+- Our GHL Agency API has rare hiccups. Click **Retry Provisioning**; usually works the second time.
+- If retry fails too, contact support — we can provision manually.
+
+**Pipelines empty in CRM Config dropdown**
+- Verify your GHL location actually has pipelines (Managed accounts get the "Inbound Leads" pipeline by default; BYOC accounts use whatever you have)
+- Refresh the dashboard; pipeline list is cached for 5 minutes
+
+**Contacts not landing in GHL**
+- Wait 2-3 min (CRM push is async)
+- Check **Settings → Integrations → CRM Health** widget for sync errors
+- If errors persist, contact support

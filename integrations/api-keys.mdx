@@ -1,0 +1,113 @@
+---
+title: "API keys"
+description: "Programmatic access to your CloudConcierge data. Issue keys, set scopes, rotate as needed."
+---
+
+CloudConcierge exposes a REST API for reading call data, managing bookings, and updating settings programmatically. Authentication is via API keys.
+
+## When you'd use this
+
+- **Custom dashboards** — pulling call data into your own BI tool
+- **Internal tools** — your team's CRM, project tracker, or admin panel pulling CC data
+- **Integrations we don't have** — connecting CC to a tool that's not on our integrations list
+- **Reporting** — automating monthly/quarterly export to internal stakeholders
+
+For simple "subscribe to events" use cases, prefer [Webhooks](/integrations/webhooks). API keys are for **active polling / writing**, not passive subscription.
+
+## Creating an API key
+
+<Steps>
+  <Step title="Open Settings → Integrations → Developer Tools → API Keys">
+    The API Keys panel.
+  </Step>
+  <Step title="Click 'Create API Key'">
+    Configuration dialog opens.
+  </Step>
+  <Step title="Configure">
+    - **Name** — internal label, e.g., "Internal BI tool" or "Bookkeeping automation"
+    - **Scopes** — what the key can do (see below)
+    - **Expiration** — optional. Recommended: 90 days max for sensitive scopes.
+  </Step>
+  <Step title="Click Create">
+    Key value is shown ONCE — copy it immediately. After this screen closes, you can never retrieve the full key (only a prefix for identification).
+  </Step>
+</Steps>
+
+## Scopes
+
+Granular permissions per key — grant minimum needed (principle of least privilege):
+
+| Scope | What it allows |
+|---|---|
+| `calls:read` | Read call logs, transcripts, summaries |
+| `recordings:read` | Generate presigned URLs for recordings |
+| `bookings:read` | Read appointment data |
+| `bookings:write` | Update appointment status, create manual bookings |
+| `settings:read` | Read tenant settings (greeting, hours, integrations) |
+| `settings:write` | Modify tenant settings (use carefully) |
+| `webhooks:manage` | Create/update/delete webhook subscriptions |
+| `analytics:read` | Read analytics metrics |
+| `*` | Full access — use sparingly |
+
+## Using a key
+
+Include the key in the `Authorization` header of every API request:
+
+```bash
+curl https://api.cloudconcierge.ai/v1/calls \
+  -H "Authorization: Bearer cck_live_..."
+```
+
+`cck_live_` prefix indicates a production key. `cck_test_` prefix indicates a test/dev key (some endpoints behave differently).
+
+## Rotation
+
+API keys never expire automatically (unless you set an expiration on creation). To rotate:
+
+1. Create a new key
+2. Update your code/config to use the new key
+3. Verify the new key works in production
+4. Revoke the old key
+
+**Don't reuse names across rotations.** Use "Internal BI tool v2" not just "Internal BI tool" — makes audit logs clearer.
+
+## Revoking
+
+API Keys → click the ⋯ menu next to a key → **Revoke**. Effective immediately. Requests using the revoked key get `401 Unauthorized`.
+
+You can't un-revoke. If you revoked by mistake, create a fresh key.
+
+## Last used
+
+The API Keys panel shows when each key was last used and from what IP. Stale keys = candidates to revoke. Unfamiliar IP = investigate.
+
+## Rate limits
+
+Per API key:
+- **600 requests/minute** baseline
+- **6,000 requests/hour** sustained
+- Bursts above either trigger 429 responses with a `Retry-After` header
+
+For higher limits, contact support@cloudconcierge.ai with your use case.
+
+## API documentation
+
+See **[API overview](/api/overview)** for endpoint reference, request/response shapes, and example workflows.
+
+## Security best practices
+
+- **Never commit API keys to git.** Use environment variables, AWS Secrets Manager, Doppler, etc.
+- **Use scoped keys.** A read-only key for a BI tool, a write-only key for a custom booking form, etc.
+- **Rotate every 90 days.** Set expiration when creating.
+- **Use test keys for dev.** `cck_test_*` keys hit a sandbox tenant (your data, but actions are no-ops where applicable)
+- **Audit regularly.** Review the API Keys panel quarterly — revoke anything not actively used.
+
+## If a key leaks
+
+If you suspect a key is exposed (committed to a public repo, leaked in logs, etc.):
+
+1. **Revoke it immediately** in the dashboard
+2. Check the last-used info for unauthorized IPs
+3. Audit any data that could have been accessed
+4. Create a new key, update your code
+5. Contact support@cloudconcierge.ai to share what happened — we can help review server logs for the impact
