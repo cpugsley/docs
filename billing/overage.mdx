@@ -9,9 +9,9 @@ CloudConcierge plans include a minute allowance. Past that, you pay per-minute o
 
 | Plan | Included minutes | Overage rate |
 |---|---|---|
-| Starter | 200/mo | $0.50/min |
-| Professional | 500/mo | $0.40/min |
-| Business | 1,000/mo | $0.30/min |
+| Starter | 200/mo | \$0.50/min |
+| Professional | 500/mo | \$0.40/min |
+| Business | 1,000/mo | \$0.30/min |
 
 If you use more than your included minutes in a billing month, the overage is billed at the start of the next month, alongside (or in addition to) your subscription charge.
 
@@ -36,14 +36,14 @@ This is the part that confuses people on annual plans.
 - **Annual subscription fee:** paid up front, locks in the discounted rate for 12 months
 - **Overage:** billed monthly throughout the year, never bundled into the annual fee
 
-**Why we do it this way:** If overage accumulated for 12 months, you could be hit with a $500-1500 overage bill at year-end. Bill shock is bad for everyone. Monthly overage keeps it predictable.
+**Why we do it this way:** If overage accumulated for 12 months, you could be hit with a \$500-1500 overage bill at year-end. Bill shock is bad for everyone. Monthly overage keeps it predictable.
 
-**Example:** You're on Professional Annual ($159/mo = $1,908/year).
-- Year 1 day 1: charged $1,908
+**Example:** You're on Professional Annual (\$159/mo = \$1,908/year).
+- Year 1 day 1: charged \$1,908
 - Months 1-12: included 500 min/month
-- January: used 600 min → 100 over → charged $40 in early February
+- January: used 600 min → 100 over → charged \$40 in early February
 - February: used 480 min → no overage
-- March: used 800 min → 300 over → charged $120 in early April
+- March: used 800 min → 300 over → charged \$120 in early April
 - ...and so on
 
 You never see overage > 1 month accumulated.
@@ -59,7 +59,7 @@ Minutes Used
 ```
 
 The progress bar updates in near real-time (~15 min lag). Color cues:
-- Green: <80% of included
+- Green: under 80% of included
 - Yellow: 80-100%
 - Red: over included (overage accruing)
 
@@ -75,7 +75,7 @@ These alerts are still being repaired (part of the Bug #33 notifications work). 
 ## How overage is invoiced
 
 - Overage is processed at the start of each billing month
-- Single line item on your invoice: "Overage — N minutes × $X.XX = $Y.YY"
+- Single line item on your invoice: "Overage — N minutes × \$X.XX = \$Y.YY"
 - Charged to the same payment method as your subscription
 - If the charge fails, your subscription enters `past_due` — fix payment method to avoid suspension
 
@@ -90,11 +90,11 @@ If you're consistently 50%+ over your included minutes, **upgrade your plan** �
 
 ## When to upgrade
 
-Rule of thumb: if monthly overage > $30, you're better off on the next plan tier.
+Rule of thumb: if monthly overage > \$30, you're better off on the next plan tier.
 
-- **Starter at 250 min/mo:** included 200, overage $25. Borderline.
-- **Starter at 400 min/mo:** overage $100 → upgrade to Professional ($199) and overage drops to $0 (under 500). Net savings: $100 - ($199 - $99) = $0. About break-even at this volume.
-- **Starter at 600 min/mo:** overage $200 → Professional at this usage = $199 + $40 overage = $239. Saved $60.
+- **Starter at 250 min/mo:** included 200, overage \$25. Borderline.
+- **Starter at 400 min/mo:** overage \$100 → upgrade to Professional (\$199) and overage drops to \$0 (under 500). Net savings: \$100 − (\$199 − \$99) = \$0. About break-even at this volume.
+- **Starter at 600 min/mo:** overage \$200 → Professional at this usage = \$199 + \$40 overage = \$239. Saved \$60.
 
 We don't auto-upgrade. Decision is yours.
 
